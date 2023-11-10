@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "bitfitx_project",
+            "request": "launch",
+            "type": "dart"
+        },
+
+        {
+            "name": "bitfitx_project (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name":"Samsung s8",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "9888d9354639354934"
+        },
+        {
+            "name":"Pixel4 emulator",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554",
+        },
+        {
+            "name": "bitfitx_project (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All devices",
+            "configurations": ["Pixel4 emulator","Samsung s8"]
+        }
+    ]
+}
