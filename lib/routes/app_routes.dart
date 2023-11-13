@@ -2,7 +2,9 @@ import 'package:bitfitx_project/presentation/account_screen/account_screen.dart'
 
 import 'package:bitfitx_project/presentation/add_content_screen.dart/add_content_screen.dart';
 import 'package:bitfitx_project/presentation/chat%20utility%20screens/bindings/video_call_binding.dart';
+import 'package:bitfitx_project/presentation/chat%20utility%20screens/bindings/voice_call_binding.dart';
 import 'package:bitfitx_project/presentation/chat%20utility%20screens/videoCallingscreen.dart';
+import 'package:bitfitx_project/presentation/chat%20utility%20screens/voiceCallingScreen.dart';
 import 'package:bitfitx_project/presentation/chat_room/binding/chat_room_binding.dart';
 import 'package:bitfitx_project/presentation/chat_room/binding/media_preview_binding.dart';
 import 'package:bitfitx_project/presentation/chat_room/chat_room_screen.dart';
@@ -56,6 +58,7 @@ class AppRoutes {
   static const String mediaPreview = '/media_preview';
   static const String videoFullScreen = '/video_full_screen';
   static const String videoCallScreen = '/video_call_screen';
+  static const String voiceCallScreen = '/voice_call_screen';
   static const String tabbedScreen = '/tabbed_screen';
   static final routes = [
     GetPage(
@@ -112,6 +115,11 @@ class AppRoutes {
       name: videoCallScreen,
       page: () => VideoCall(),
       binding: VideoCallBinding(),
+    ),
+    GetPage(
+      name: voiceCallScreen,
+      page: () => VoiceCalling(),
+      binding: VoiceCallBinding(),
     ),
     GetPage(
       name: tabbedScreen,

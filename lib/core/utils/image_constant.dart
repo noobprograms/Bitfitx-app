@@ -8,6 +8,9 @@ class ImageConstant {
   // Sign Up Screen images
   static String imgArrow1 = '$imagePath/img_arrow1.svg';
 
+  //account screen
+  static String settingIcon = '$imagePath/settings_icon.png';
+
   // Common images
   static String imgRemoval1 = '$imagePath/img_removal1.png';
 

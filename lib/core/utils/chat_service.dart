@@ -108,6 +108,7 @@ class ChatService extends ChangeNotifier {
 
   static Future<void> sendPushNotif(
       User chatUser, User receiver, String message) async {
+    print('the token value in chatservice${receiver.tokenValue!}');
     try {
       final body = {
         "priority": 'high',

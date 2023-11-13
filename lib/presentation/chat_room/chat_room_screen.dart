@@ -57,7 +57,11 @@ class ChatRoom extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.offNamed(AppRoutes.voiceCallScreen, arguments: {
+                    'cUser': controller.currentUser,
+                  });
+                },
                 icon: Icon(
                   Icons.call,
                   color: Colors.yellow,

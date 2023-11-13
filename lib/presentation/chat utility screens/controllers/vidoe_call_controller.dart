@@ -14,9 +14,10 @@ class VideoCallController extends GetxController {
 
     client = AgoraClient(
         agoraConnectionData: AgoraConnectionData(
-      appId: appID,
-      channelName: 'bitfitx call',
-    ));
+            appId: appID,
+            channelName: 'bitfitx call',
+            tempToken:
+                '007eJxTYLj84OFy8RvTlRdpf9/nEfx9uag8U3C/1P/ZUlyigkzpmyMUGFKSTS0NUxMtzNJSU0wS0ywsTA1TDAxSTCwsU5MTU00NHtzxTW0IZGRozl3BzMgAgSA+D0NSZklaZkmFQnJiTg4DAwA8MyI3'));
 
     await client.initialize();
   }

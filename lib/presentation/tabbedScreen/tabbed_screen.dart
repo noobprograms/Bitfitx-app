@@ -17,68 +17,69 @@ class TabbedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          currentIndex: controller.tabbingIndex.value,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: Colors.yellow,
-          unselectedItemColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Color.fromARGB(255, 71, 71, 71),
-          items: [
-            const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home_outlined,
+        bottomNavigationBar: Obx(
+          () => BottomNavigationBar(
+            currentIndex: controller.tabbingIndex.value,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedItemColor: Colors.yellow,
+            unselectedItemColor: Colors.white,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Color.fromARGB(255, 71, 71, 71),
+            items: [
+              const BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home_outlined,
+                ),
+                label: 'Home',
               ),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(
-                AssetImage(ImageConstant.trending),
+              BottomNavigationBarItem(
+                icon: ImageIcon(
+                  AssetImage(ImageConstant.trending),
+                ),
+                label: 'trending',
               ),
-              label: 'trending',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage(ImageConstant.reels)),
-              label: 'Reels',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.add_circle_outline,
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage(ImageConstant.reels)),
+                label: 'Reels',
               ),
-              label: 'Add',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage(ImageConstant.verified_videos)),
-              label: 'verified Vids',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.groups),
-              label: 'groups',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: 'account',
-            ),
-          ],
-          onTap: (value) {
-            controller.setTabbingIndex(value);
-          },
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.add_circle_outline,
+                ),
+                label: 'Add',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage(ImageConstant.verified_videos)),
+                label: 'verified Vids',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.groups),
+                label: 'groups',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle_outlined),
+                label: 'account',
+              ),
+            ],
+            onTap: (value) {
+              controller.setTabbingIndex(value);
+            },
+          ),
         ),
-      ),
-      body: IndexedStack(
-        index: controller.tabbingIndex.value,
-        children: [
-          Home(controller.currentUser),
-          TrendingScreen(),
-          ReelsScreen(),
-          AddContentScreen(),
-          VerifiedVidScreen(),
-          GroupsScreen(),
-          AccountScreen(),
-        ],
-      ),
-    );
+        body: Obx(
+          () => IndexedStack(
+            index: controller.tabbingIndex.value,
+            children: [
+              Home(controller.currentUser),
+              TrendingScreen(),
+              ReelsScreen(),
+              AddContentScreen(controller.currentUser),
+              VerifiedVidScreen(),
+              GroupsScreen(),
+              AccountScreen(controller.currentUser),
+            ],
+          ),
+        ));
   }
 }

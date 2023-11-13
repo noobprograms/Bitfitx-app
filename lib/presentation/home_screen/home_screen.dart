@@ -16,6 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+    print('this is home ${cUser.tokenValue!}');
 
     return SafeArea(
       child: Scaffold(
@@ -72,7 +73,7 @@ class Home extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 150,
+                height: 120,
                 child: ListView.builder(
                   itemCount: storyListUser.length + 1,
                   scrollDirection: Axis.horizontal,
@@ -91,6 +92,14 @@ class Home extends StatelessWidget {
                         user: storyListUser[index - 1].user,
                       );
                   },
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                child: Text(
+                  'Live Now',
+                  style: CustomTextStyles.headlineLargeOnPrimaryContainer,
                 ),
               ),
             ],

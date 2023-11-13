@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../core/utils/auth_constants.dart';
 import '../../presentation/home_screen/home_screen.dart';
 import '../../routes/app_routes.dart';
+import 'package:bitfitx_project/data/models/message_model.dart' as msg;
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -27,13 +28,14 @@ class AuthController extends GetxController {
     ever(googleSignInAccount, _setInitialScreenGoogle);
   }
 
-  _setInitialScreen(User? user) {
+  _setInitialScreen(User? user) async {
     if (user == null) {
       // if the user is not found then the user is navigated to the Register Screen
       if (Get.currentRoute != '/login_screen')
         Get.offNamed(AppRoutes.signupLoginScreen);
     } else {
       // if the user exists and logged in the the user is navigated to the Home Screen
+      // await firebaseFirestore.collection('users').doc(user.uid).get().then((value) => value.data());
       var toPutName = '';
       var toPutPhoto = '';
       if (user.displayName != null) toPutName = user.displayName!;
@@ -51,12 +53,25 @@ class AuthController extends GetxController {
       Get.offAllNamed(AppRoutes.signupLoginScreen);
     } else {
       // if the user exists and logged in the the user is navigated to the Home Screen
-      userToStore.updateUser(
-          googleSignInAccount.id,
-          googleSignInAccount.displayName,
-          googleSignInAccount.email,
-          googleSignInAccount.photoUrl,
-          "");
+      var profileImage;
+      var coverImage;
+      await firebaseFirestore
+          .collection('users')
+          .doc(googleSignInAccount.id)
+          .get()
+          .then((value) {
+        userToStore = usermodel.User(
+            uid: value.data()!['uid'],
+            name: value.data()!['name'],
+            email: value.data()!['email'],
+            tokenValue: value.data()!['tokenValue'],
+            profileImageUrl: value.data()!['profileImageUrl'],
+            coverImageUrl: value.data()!['coverImageUrl'],
+            fans: value.data()!['fans'],
+            following: value.data()!['following'],
+            posts: value.data()!['posts']);
+      });
+
       Get.offAllNamed(AppRoutes.tabbedScreen,
           arguments: {'currentUser': userToStore});
     }
@@ -78,6 +93,7 @@ class AuthController extends GetxController {
         UserCredential cred = await auth
             .signInWithCredential(credential)
             .catchError((onErr) => print(onErr));
+
         userToStore = usermodel.User(
           uid: cred.user!.uid,
           name: cred.user!.displayName!,

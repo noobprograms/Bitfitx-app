@@ -6,6 +6,9 @@ class User {
   String email;
   String profileImageUrl;
   String coverImageUrl;
+  String following;
+  String fans;
+  String posts;
   String tokenValue;
 
   User(
@@ -14,8 +17,17 @@ class User {
       required this.email,
       this.profileImageUrl = '',
       this.coverImageUrl = '',
+      this.following = "0",
+      this.fans = "0",
+      this.posts = "0",
       required this.tokenValue});
-  void updateUser(String uid, name, email, profileImageUrl, coverImageUrl) {
+  void updateUser(
+    String uid,
+    name,
+    email,
+    profileImageUrl,
+    coverImageUrl,
+  ) {
     this.name = name;
     this.uid = uid;
     this.email = email;
@@ -30,19 +42,22 @@ class User {
       'email': email,
       'profileImageUrl': profileImageUrl,
       'coverImageUrl': coverImageUrl,
+      'following': following,
+      'fans': fans,
+      'posts': posts,
       'tokenValue': tokenValue
     };
   }
 
-  static User fromSnap(DocumentSnapshot snap) {
-    var snapShot = snap.data() as Map<String, dynamic>;
+  // static User fromSnap(DocumentSnapshot snap) {
+  //   var snapShot = snap.data() as Map<String, dynamic>;
 
-    return User(
-        uid: snapShot['uid'],
-        name: snapShot['name'],
-        email: snapShot['email'],
-        profileImageUrl: snapShot['profileImageUrl'],
-        coverImageUrl: snapShot['coverImageUrl'],
-        tokenValue: snapShot['tokenValue']);
-  }
+  //   return User(
+  //       uid: snapShot['uid'],
+  //       name: snapShot['name'],
+  //       email: snapShot['email'],
+  //       profileImageUrl: snapShot['profileImageUrl'],
+  //       coverImageUrl: snapShot['coverImageUrl'],
+  //       tokenValue: snapShot['tokenValue']);
+  // }
 }
