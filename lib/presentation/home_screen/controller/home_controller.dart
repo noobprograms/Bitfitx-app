@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 
 class HomeController extends GetxController {
   var notifService = NotificationService();
+  var commentController = TextEditingController();
 
   void openStory() {
     Get.toNamed(AppRoutes.storyScreen);
@@ -90,5 +91,25 @@ class HomeController extends GetxController {
             arguments: {"file": storyAsset, 'user': cUser});
       }
     }
+  }
+
+  Future<Map<String, dynamic>> getUserCred(String uid) async {
+    var result;
+    await firebaseFirestore
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) => result = value.data()!);
+    return result;
+  }
+
+  void increaseLikes(String pid) async {
+    var result = await firebaseFirestore.collection('posts').doc(pid).get();
+    var currentLikes = int.parse(result.data()!['likes']);
+    var newLikes = currentLikes + 1;
+    await firebaseFirestore
+        .collection('posts')
+        .doc(pid)
+        .update({'likes': (newLikes).toString()});
   }
 }

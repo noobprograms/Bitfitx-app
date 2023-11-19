@@ -17,6 +17,8 @@ class ImageConstant {
   static String imgRectangle4 = '$imagePath/google.png';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+  static String likeIcon = '$imagePath/like_new_icon.png';
+  static String commentIcon = '$imagePath/comment_icon.png';
 
   static String search = '$imagePath/searchIcon.png';
   static String chat = '$imagePath/chat.png';

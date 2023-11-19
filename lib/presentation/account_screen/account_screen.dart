@@ -218,8 +218,7 @@ class AccountScreen extends StatelessWidget {
                       child: StreamBuilder(
                           stream: firebaseFirestore
                               .collection('posts')
-                              .doc(currentUser.uid)
-                              .collection('allPosts')
+                              .where('uid', isEqualTo: currentUser.uid)
                               .snapshots(),
                           builder: ((context, snapshot) {
                             if (snapshot.hasError)

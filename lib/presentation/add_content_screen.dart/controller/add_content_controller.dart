@@ -6,6 +6,7 @@ import 'package:bitfitx_project/data/models/post_model.dart';
 import 'package:bitfitx_project/data/models/user_model.dart';
 import 'package:bitfitx_project/routes/app_routes.dart';
 import 'package:bitfitx_project/widgets/custom_elevated_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -151,11 +152,7 @@ class AddContentController extends GetxController {
     );
 
     ///all the code that i am writing now
-    var allPosts = await firebaseFirestore
-        .collection('posts')
-        .doc(currentUser.uid)
-        .collection('allPosts')
-        .get();
+    var allPosts = await firebaseFirestore.collection('posts').get();
 
     var len = allPosts.docs.length;
     var currentPostID = 'post${len}';
@@ -172,15 +169,15 @@ class AddContentController extends GetxController {
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     pictureSelected.value = true;
+    final Timestamp timestamp = Timestamp.now();
     var thisPost = Post(
         pid: currentPostID,
         uid: currentUser.uid,
         postPictureUrl: downloadUrl,
-        content: postDescription.text);
+        content: postDescription.text,
+        dateTime: timestamp);
     await firebaseFirestore
         .collection('posts')
-        .doc(currentUser!.uid)
-        .collection('allPosts')
         .doc(currentPostID)
         .set(thisPost.toJson())
         .then((value) async {
