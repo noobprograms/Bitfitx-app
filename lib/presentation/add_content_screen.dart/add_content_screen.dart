@@ -15,6 +15,7 @@ class AddContentScreen extends StatelessWidget {
   AddContentController controller = Get.find();
   @override
   Widget build(BuildContext context) {
+    controller.saveUser(cUser);
     return SafeArea(
         child: Scaffold(
       extendBody: true,
@@ -78,7 +79,9 @@ class AddContentScreen extends StatelessWidget {
                 CustomElevatedButton(
                   text: 'Add Post',
                   width: 100,
-                  onTap: () {},
+                  onTap: () {
+                    controller.postAdder(context);
+                  },
                 ),
                 SizedBox(
                   height: 30,

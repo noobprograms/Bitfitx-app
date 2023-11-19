@@ -104,71 +104,86 @@ class AccountScreen extends StatelessWidget {
                         SizedBox(
                           height: 40,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(shape: BoxShape.circle),
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                  currentUser.profileImageUrl,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Column(
-                              children: [
-                                Text(currentUser.posts,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                  'Posts',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            Column(
-                              children: [
-                                Text(currentUser.fans,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                  'Fans',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              width: 40,
-                            ),
-                            Column(
-                              children: [
-                                Text(currentUser.following,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold)),
-                                Text(
-                                  'Following',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ],
-                        )
+                        StreamBuilder(
+                            stream: firebaseFirestore
+                                .collection('users')
+                                .doc(currentUser.uid)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError)
+                                return Text('Error${snapshot.error}');
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting)
+                                return Text('Loading...');
+                              var myuser = snapshot.data!.data();
+
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration:
+                                        BoxDecoration(shape: BoxShape.circle),
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                        currentUser.profileImageUrl,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 30,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(myuser!['posts'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                        'Posts',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 40,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(myuser!['fans'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                        'Fans',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 40,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(myuser!['following'],
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                        'Following',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              );
+                            })
                       ],
                     ),
                   ),
@@ -186,28 +201,57 @@ class AccountScreen extends StatelessWidget {
               ),
               Expanded(
                   child: Container(
-                padding: EdgeInsets.only(
-                  top: 75.v,
-                  left: 15,
-                  right: 15,
-                ),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(48, 47, 47, 1),
-                          Color.fromRGBO(141, 139, 139, 0)
-                        ])),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 900,
-                    )
-                  ],
-                ),
-              ))
+                      width: mediaQueryData.size.width,
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color.fromRGBO(48, 47, 47, 1),
+                                Color.fromRGBO(141, 139, 139, 0)
+                              ])),
+                      child: StreamBuilder(
+                          stream: firebaseFirestore
+                              .collection('posts')
+                              .doc(currentUser.uid)
+                              .collection('allPosts')
+                              .snapshots(),
+                          builder: ((context, snapshot) {
+                            if (snapshot.hasError)
+                              return Text('Error${snapshot.error}');
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting)
+                              return Text('Loading...');
+                            return GridView(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              children: snapshot.data!.docs
+                                  .map((doc) => Container(
+                                        height: 98,
+                                        width: 98,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: GestureDetector(
+                                          onTap: () {},
+                                          child: Image.network(
+                                            doc.data()['postPictureUrl'],
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            );
+                          }))))
             ]),
           ),
         ),

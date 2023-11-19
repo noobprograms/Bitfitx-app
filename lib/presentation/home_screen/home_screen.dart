@@ -4,6 +4,7 @@ import 'package:bitfitx_project/core/utils/size_utils.dart';
 import 'package:bitfitx_project/data/story_data.dart';
 import 'package:bitfitx_project/googleauth/controller/auth_controller.dart';
 import 'package:bitfitx_project/presentation/home_screen/controller/home_controller.dart';
+import 'package:bitfitx_project/widgets/custom_elevated_button.dart';
 import 'package:bitfitx_project/widgets/story_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -101,6 +102,42 @@ class Home extends StatelessWidget {
                   'Live Now',
                   style: CustomTextStyles.headlineLargeOnPrimaryContainer,
                 ),
+              ),
+              ////////////////////////////////////////////////////////////
+              ///
+              ///
+              ///
+              ///
+              ///////////////////////////////////////////////////////////
+              ///
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                child: Row(
+                  children: [
+                    Text(
+                      'Posts',
+                      style: CustomTextStyles.headlineLargeOnPrimaryContainer,
+                    ),
+                    // CustomElevatedButton(text: 'Buy Posts'),
+                  ],
+                ),
+              ),
+              StreamBuilder(
+                stream: firebaseFirestore.collection('posts').snapshots(),
+                builder: ((context, snapshot) {
+                  var myList = snapshot.data!.docs;
+                  print(myList);
+                  return ListView.builder(
+                    itemBuilder: ((context, index) {
+                      return Container(
+                        width: 369,
+                        height: 296,
+                        color: Color.fromRGBO(47, 47, 47, 1),
+                      );
+                    }),
+                  );
+                }),
               ),
             ],
           ),

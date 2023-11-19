@@ -38,6 +38,7 @@ class AccountController extends GetxController {
         fans: tempData['fans'],
         following: tempData['following'],
         posts: tempData['posts']);
+    print("Iam ${currentUser!.posts}");
     profileImageToDisplay?.value = currentUser!.profileImageUrl;
     if (currentUser!.coverImageUrl != '') {
       coverImageToDisplay.value = currentUser!.coverImageUrl;
