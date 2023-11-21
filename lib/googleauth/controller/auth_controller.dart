@@ -90,9 +90,7 @@ class AuthController extends GetxController {
           idToken: googleSignInAuthentication.idToken,
         );
         getNotificationToken();
-        UserCredential cred = await auth
-            .signInWithCredential(credential)
-            .catchError((onErr) => print(onErr));
+        UserCredential cred = await auth.signInWithCredential(credential);
 
         userToStore = usermodel.User(
           uid: cred.user!.uid,

@@ -47,17 +47,17 @@ List<UserStoryList> storyListUser = [
             'http://m.gettywallpapers.com/wp-content/uploads/2021/03/Cool-HD-Wallpaper.jpg',
       ),
       story: stories),
-  UserStoryList(
-      user: User(
-        uid: 'one thing',
-        tokenValue: '',
-        coverImageUrl: 'one thing',
-        email: 'one thing',
-        name: 'The Flutter Pro fit 1',
-        profileImageUrl:
-            'https://firebasestorage.googleapis.com/v0/b/bitfitx-app.appspot.com/o/ahmed.jpg?alt=media&token=7d9d0589-9396-4524-b103-9f65323b7527',
-      ),
-      story: stories),
+  // UserStoryList(
+  //     user: User(
+  //       uid: 'one thing',
+  //       tokenValue: '',
+  //       coverImageUrl: 'one thing',
+  //       email: 'one thing',
+  //       name: 'The Flutter Pro fit 1',
+  //       profileImageUrl:
+  //           'https://firebasestorage.googleapis.com/v0/b/bitfitx-app.appspot.com/o/ahmed.jpg?alt=media&token=7d9d0589-9396-4524-b103-9f65323b7527',
+  //     ),
+  //     story: stories),
 ];
 
 class UserStoryList {

@@ -41,15 +41,16 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.6.5
-  connectivity_plus: ^4.0.2
+  connectivity_plus: ^5.0.1
   shared_preferences: ^2.2.2
   google_sign_in: ^6.1.5
   cached_network_image: ^3.2.3
   flutter_svg: ^2.0.7
   
 
-  firebase_core_platform_interface: 4.8.0
+  firebase_core_platform_interface: ^5.0.0
   video_player: ^2.7.2
+  
   image_picker: ^1.0.4
   firebase_storage: ^11.2.8
   whatsapp_camera: ^1.0.0

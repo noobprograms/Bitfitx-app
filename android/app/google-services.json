@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "622192024091",
-    "project_id": "bitfitx-app",
-    "storage_bucket": "bitfitx-app.appspot.com"
+    "project_number": "763479566523",
+    "project_id": "bitfitx-social-f9219",
+    "storage_bucket": "bitfitx-social-f9219.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:622192024091:android:429d8e3fdf0ca4aa8df6be",
+        "mobilesdk_app_id": "1:763479566523:android:7c2f23d19c176c1b7a219e",
         "android_client_info": {
           "package_name": "com.example.bitfitx_project"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "622192024091-220gkgltpru74pgb4897muqapvq2713v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDoZR_EQonDgr2nMcJVC5xB3v0dQi55800"
+          "current_key": "AIzaSyBeTV8zdB5tRMZvv935GViTq9Dyh3l4gfA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "622192024091-220gkgltpru74pgb4897muqapvq2713v.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "622192024091-jkmjsvs5875oistbnqekeeh3qfmtbne3.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.bitfitxProject.RunnerTests"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bitfitx_project/core/app_export.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
+import 'package:bitfitx_project/data/models/comment_model.dart';
+import 'package:bitfitx_project/data/models/user_model.dart';
 import 'package:bitfitx_project/presentation/home_screen/controller/home_controller.dart';
 import 'package:bitfitx_project/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostCard extends StatelessWidget {
   PostCard(
-      {this.postImageUrl,
+      {this.currentUser,
+      this.postImageUrl,
       this.postID,
       this.description,
       this.likes,
@@ -19,6 +22,7 @@ class PostCard extends StatelessWidget {
       this.uid,
       super.key});
   final postImageUrl;
+  final currentUser;
   final description;
   final likes;
   final comments;
@@ -135,31 +139,170 @@ class PostCard extends StatelessWidget {
                           ),
                           onPressed: () {
                             Get.bottomSheet(
-                                Container(
-                                  height: 150,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
+                              Container(
+                                height: 350,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             CustomTextFormField(
-                                              width: 300,
+                                              width: 250,
                                               hintText: 'Enter a comment',
                                               controller:
                                                   controller.commentController,
                                             ),
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () async {
+                                                  var result =
+                                                      await firebaseFirestore
+                                                          .collection(
+                                                              'comments')
+                                                          .doc(postID)
+                                                          .collection(
+                                                              'allComments')
+                                                          .get();
+
+                                                  var len = result.docs!.length;
+                                                  var commentID =
+                                                      'comment${len}';
+                                                  var comment = CommentPost(
+                                                      commentID,
+                                                      controller
+                                                          .commentController
+                                                          .text,
+                                                      uid,
+                                                      currentUser
+                                                          .profileImageUrl,
+                                                      currentUser.name,
+                                                      Timestamp.now());
+                                                  controller.commentController
+                                                      .text = '';
+                                                  await firebaseFirestore
+                                                      .collection('comments')
+                                                      .doc(postID)
+                                                      .collection("allComments")
+                                                      .doc(commentID)
+                                                      .set(comment.toJson());
+
+                                                  var currentPost =
+                                                      await firebaseFirestore
+                                                          .collection('posts')
+                                                          .doc(postID)
+                                                          .get();
+                                                  var newComments = 1 +
+                                                      int.parse(currentPost
+                                                          .data()!['comments']);
+                                                  await firebaseFirestore
+                                                      .collection('posts')
+                                                      .doc(postID)
+                                                      .update({
+                                                    "comments":
+                                                        newComments.toString()
+                                                  });
+                                                },
                                                 icon: Icon(Icons.send))
                                           ],
                                         ),
-                                        Column()
-                                      ],
-                                    ),
+                                      ),
+                                      StreamBuilder(
+                                          stream: firebaseFirestore
+                                              .collection('comments')
+                                              .doc(postID)
+                                              .collection('allComments')
+                                              .orderBy('timestamp',
+                                                  descending: true)
+                                              .snapshots(),
+                                          builder: ((context, snapshot) {
+                                            if (snapshot.hasError)
+                                              return Text(
+                                                  'Error${snapshot.error}');
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting)
+                                              return Text('Loading...');
+                                            if (!snapshot.hasData) {
+                                              print(snapshot.hasData);
+                                              return Container(
+                                                  child: Text(
+                                                'No Comments!!. Be the first to comment.',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 120),
+                                              ));
+                                            } else {
+                                              return ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                itemCount:
+                                                    snapshot.data!.docs.length,
+                                                itemBuilder: (context, index) =>
+                                                    Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(snapshot
+                                                                      .data!
+                                                                      .docs[index]
+                                                                      .data()[
+                                                                  'profileImageUrl']),
+                                                        ),
+                                                      ),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            child: Text(
+                                                              snapshot.data!
+                                                                  .docs[index]
+                                                                  .data()['name'],
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Text(snapshot
+                                                                    .data!
+                                                                    .docs[index]
+                                                                    .data()[
+                                                                'content']),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          }))
+                                    ],
                                   ),
                                 ),
-                                backgroundColor: Colors.blueGrey);
+                              ),
+                              backgroundColor:
+                                  Color.fromARGB(202, 128, 144, 151),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            );
                           },
                         ),
                         Column(

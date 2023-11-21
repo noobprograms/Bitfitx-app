@@ -3,21 +3,29 @@ import 'dart:io';
 import 'package:bitfitx_project/core/app_export.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/data/models/post_model.dart';
+import 'package:bitfitx_project/data/models/reels_model.dart';
 import 'package:bitfitx_project/data/models/user_model.dart';
 import 'package:bitfitx_project/routes/app_routes.dart';
 import 'package:bitfitx_project/widgets/custom_elevated_button.dart';
+import 'package:bitfitx_project/widgets/custom_text_form_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+
+import 'package:video_player/video_player.dart';
 
 class AddContentController extends GetxController {
   var assetFile;
   RxBool pictureSelected = false.obs;
   late User currentUser;
   TextEditingController postDescription = TextEditingController();
+  VideoPlayerController? videoController;
+  TextEditingController shortCaptionController = TextEditingController();
+  late Duration videoDuration;
   void goToMessages(User cUser) {
     Get.toNamed(AppRoutes.chatsScreen, arguments: {'currentUser': cUser});
   }
@@ -171,11 +179,12 @@ class AddContentController extends GetxController {
     pictureSelected.value = true;
     final Timestamp timestamp = Timestamp.now();
     var thisPost = Post(
-        pid: currentPostID,
-        uid: currentUser.uid,
-        postPictureUrl: downloadUrl,
-        content: postDescription.text,
-        dateTime: timestamp);
+      pid: currentPostID,
+      uid: currentUser.uid,
+      postPictureUrl: downloadUrl,
+      content: postDescription.text,
+      dateTime: timestamp,
+    );
     await firebaseFirestore
         .collection('posts')
         .doc(currentPostID)
@@ -191,5 +200,155 @@ class AddContentController extends GetxController {
     });
 
     // coverImageToDisplay.value = downloadUrl;
+  }
+
+  ////////////////for shorts///////////////////////////
+  ///
+  ///
+  void addShort() {
+    Get.defaultDialog(
+        backgroundColor: Colors.black,
+        title: '',
+        content: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.white),
+            onPressed: () {
+              pickVideo(ImageSource.gallery);
+            },
+            icon: Icon(
+              Icons.photo,
+            ),
+            label: Text('Gallery'),
+          ),
+          TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.white),
+            onPressed: () {
+              pickVideo(ImageSource.camera);
+            },
+            icon: Icon(Icons.videocam),
+            label: Text('Camera'),
+          ),
+        ]));
+  }
+
+  void pickVideo(ImageSource src) async {
+    final video = await ImagePicker().pickVideo(
+      source: src,
+      maxDuration: Duration(seconds: 30),
+    );
+    videoController = VideoPlayerController.file(File(video!.path));
+    videoDuration = videoController!.value.duration;
+    videoController!.initialize();
+    videoController!.play();
+    videoController!.setVolume(1);
+    videoController!.setLooping(true);
+    if (video != null) {
+      Get.bottomSheet(
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    videoController!.dispose();
+                    shortCaptionController.text = '';
+                    Get.close(2);
+                  },
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                SizedBox(
+                    height: mediaQueryData.size.height / 1.5,
+                    width: mediaQueryData.size.width,
+                    child: VideoPlayer(videoController!)),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CustomTextFormField(
+                    autofocus: false,
+                    hintText: 'Describe your reel',
+                    controller: shortCaptionController,
+                    width: 300,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: CustomElevatedButton(
+                            text: "Upload Reel",
+                            width: 150,
+                            onTap: () {
+                              uploadReel(video.path);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: CustomElevatedButton(
+                            text: "Cancel",
+                            width: 100,
+                            onTap: () {
+                              videoController!.dispose();
+                              shortCaptionController.text = '';
+                              Get.close(2);
+                            },
+                          ),
+                        ),
+                      ]),
+                ),
+              ],
+            ),
+          ),
+          isDismissible: false,
+          backgroundColor: Colors.grey,
+          enableDrag: false);
+    }
+  }
+
+  void uploadReel(String vidPath) async {
+    Get.defaultDialog(
+        title: 'Uploading',
+        content: CircularProgressIndicator(),
+        barrierDismissible: false);
+    var allReels = await firebaseFirestore.collection('reels').get();
+    int len = allReels.docs.length;
+    String reelId = (len).toString();
+
+    Reference ref = firebaseStorage.ref().child('reels').child(reelId);
+    UploadTask uploadTask = ref.putFile(File(vidPath));
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    // final thumbnail = await VideoCompress.getFileThumbnail(vidPath);
+    // Reference ref1 = firebaseStorage.ref().child('thumbnails').child(reelId);
+    // UploadTask uploadTask1 = ref.putFile(thumbnail);
+    // TaskSnapshot snap1 = await uploadTask1;
+    // String thumbnailDonwlodUrl = await snap1.ref.getDownloadURL();
+    Reel newReel = Reel(
+      username: currentUser.name,
+      uid: currentUser.uid,
+      rid: reelId,
+      likes: [],
+      commentCount: 0,
+      shareCount: 0,
+      caption: shortCaptionController.text,
+      videoUrl: downloadUrl,
+      profilePhoto: currentUser.profileImageUrl,
+    );
+    await firebaseFirestore
+        .collection('reels')
+        .doc(reelId)
+        .set(newReel.toJson());
+    videoController?.dispose();
+    Get.close(3);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    videoController?.dispose();
   }
 }

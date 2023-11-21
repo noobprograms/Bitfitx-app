@@ -1,6 +1,7 @@
 import 'package:bitfitx_project/core/app_export.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/core/utils/notification_service.dart';
+import 'package:bitfitx_project/data/models/comment_model.dart';
 import 'package:bitfitx_project/data/models/user_model.dart' as userModel;
 import 'package:bitfitx_project/data/models/user_model.dart';
 import 'package:bitfitx_project/widgets/custom_elevated_button.dart';
@@ -93,6 +94,7 @@ class HomeController extends GetxController {
     }
   }
 
+/////////////////////////////post things/////////////////////////////////////////
   Future<Map<String, dynamic>> getUserCred(String uid) async {
     var result;
     await firebaseFirestore

@@ -145,6 +145,7 @@ class Home extends StatelessWidget {
                           // shrinkWrap: true,
                           children: myList.map((doc) {
                             return PostCard(
+                              currentUser: cUser,
                               postID: doc.data()['pid'],
                               postImageUrl: doc.data()['postPictureUrl'],
                               description: doc.data()['content'],

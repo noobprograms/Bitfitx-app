@@ -19,6 +19,8 @@ class VoiceCallController extends GetxController {
         agoraConnectionData: AgoraConnectionData(
       appId: appID,
       channelName: 'bitfitx call',
+      tempToken:
+          '007eJxTYAju07Uu1H/0t9Yp96efa+/NN88UlEqOrXSbuf135sUrj3sVGFKSTS0NUxMtzNJSU0wS0ywsTA1TDAxSTCwsU5MTU00NjpfFpDYEMjIcazNgZmSAQBCfhyEpsyQts6RCITkxJ4eBAQA4OCVu',
     ));
 
     await client.initialize().then((value) => client.sessionController

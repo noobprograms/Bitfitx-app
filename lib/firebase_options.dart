@@ -44,40 +44,38 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCeTBk5BqvwzcmGfwC7zulIeJUSirwl1uM',
-    appId: '1:622192024091:web:3124102beb2bb5cb8df6be',
-    messagingSenderId: '622192024091',
-    projectId: 'bitfitx-app',
-    authDomain: 'bitfitx-app.firebaseapp.com',
-    storageBucket: 'bitfitx-app.appspot.com',
-    measurementId: 'G-YLXC4KQLYE',
+    apiKey: 'AIzaSyB0TrNT7KZY1dV_lb-u1PUu9VY5qiLpkLw',
+    appId: '1:763479566523:web:fa7c650392a8f38d7a219e',
+    messagingSenderId: '763479566523',
+    projectId: 'bitfitx-social-f9219',
+    authDomain: 'bitfitx-social-f9219.firebaseapp.com',
+    storageBucket: 'bitfitx-social-f9219.appspot.com',
+    measurementId: 'G-JX7Y0E1XPC',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDoZR_EQonDgr2nMcJVC5xB3v0dQi55800',
-    appId: '1:622192024091:android:429d8e3fdf0ca4aa8df6be',
-    messagingSenderId: '622192024091',
-    projectId: 'bitfitx-app',
-    storageBucket: 'bitfitx-app.appspot.com',
+    apiKey: 'AIzaSyBeTV8zdB5tRMZvv935GViTq9Dyh3l4gfA',
+    appId: '1:763479566523:android:7c2f23d19c176c1b7a219e',
+    messagingSenderId: '763479566523',
+    projectId: 'bitfitx-social-f9219',
+    storageBucket: 'bitfitx-social-f9219.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBflKEkV8aq6O9cbcNENj4OJ3nwDeUvN1U',
-    appId: '1:622192024091:ios:6f489ce2b39b20c78df6be',
-    messagingSenderId: '622192024091',
-    projectId: 'bitfitx-app',
-    storageBucket: 'bitfitx-app.appspot.com',
-    iosClientId: '622192024091-p87k9kah040gpgc070lqu26pi96aql8f.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB4_XAryhE0A1x0ihysTQ-5OOtS-fg3JVw',
+    appId: '1:763479566523:ios:b0bddec503e0fbff7a219e',
+    messagingSenderId: '763479566523',
+    projectId: 'bitfitx-social-f9219',
+    storageBucket: 'bitfitx-social-f9219.appspot.com',
     iosBundleId: 'com.example.bitfitxProject',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBflKEkV8aq6O9cbcNENj4OJ3nwDeUvN1U',
-    appId: '1:622192024091:ios:0e9c14c9d52ad6398df6be',
-    messagingSenderId: '622192024091',
-    projectId: 'bitfitx-app',
-    storageBucket: 'bitfitx-app.appspot.com',
-    iosClientId: '622192024091-jkmjsvs5875oistbnqekeeh3qfmtbne3.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB4_XAryhE0A1x0ihysTQ-5OOtS-fg3JVw',
+    appId: '1:763479566523:ios:99ba6e7a410e43da7a219e',
+    messagingSenderId: '763479566523',
+    projectId: 'bitfitx-social-f9219',
+    storageBucket: 'bitfitx-social-f9219.appspot.com',
     iosBundleId: 'com.example.bitfitxProject.RunnerTests',
   );
 }

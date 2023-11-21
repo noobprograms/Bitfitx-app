@@ -117,7 +117,9 @@ class AddContentScreen extends StatelessWidget {
                 CustomElevatedButton(
                   width: 100,
                   text: 'Add short',
-                  onTap: () {},
+                  onTap: () {
+                    controller.addShort();
+                  },
                 ),
                 SizedBox(
                   height: 30,
