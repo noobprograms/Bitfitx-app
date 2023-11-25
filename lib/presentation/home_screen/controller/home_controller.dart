@@ -12,13 +12,47 @@ import 'package:image_picker/image_picker.dart';
 class HomeController extends GetxController {
   var notifService = NotificationService();
   var commentController = TextEditingController();
+  TextEditingController searchUserInput = TextEditingController();
+  RxList searchResults = [].obs;
 
+  RxList allUsers = [].obs;
   void openStory() {
     Get.toNamed(AppRoutes.storyScreen);
   }
 
   void goToMessages(User cUser) {
     Get.toNamed(AppRoutes.chatsScreen, arguments: {'currentUser': cUser});
+  }
+
+  void getAllUsers(User cUser) async {
+    var data = await firebaseFirestore
+        .collection('users')
+        .where('uid', isNotEqualTo: cUser.uid)
+        .get();
+
+    data.docs.forEach(
+      (element) {
+        allUsers.add(element.data());
+      },
+    );
+  }
+
+  ///////searching functionality////////
+  void messageTextChanged(String value) {
+    // List<Map<String, dynamic>> results = [];
+    // if (value.isEmpty) results = allUsers;
+
+    if (value.isNotEmpty) {
+      searchResults.value = allUsers
+          .where((element) =>
+              element['name'].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    } else {
+      // Filter and add users that match the search query
+      searchResults.value = allUsers;
+    }
+
+    update();
   }
 
   void addStory(User cUser, BuildContext ctx) {

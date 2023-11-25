@@ -1,5 +1,7 @@
 import 'package:bitfitx_project/presentation/account_screen/account_screen.dart';
 
+import 'package:bitfitx_project/presentation/account_screen/otherAccount_screen.dart';
+
 import 'package:bitfitx_project/presentation/add_content_screen.dart/add_content_screen.dart';
 import 'package:bitfitx_project/presentation/chat%20utility%20screens/bindings/video_call_binding.dart';
 import 'package:bitfitx_project/presentation/chat%20utility%20screens/bindings/voice_call_binding.dart';
@@ -49,7 +51,7 @@ class AppRoutes {
   static const String signUpScreen = '/sign_up_screen';
 
   static const String storyScreen = '/story_screen';
-
+  static const String otherAccountScreen = '/other_account_screen';
   static const String appNavigationScreen = '/app_navigation_screen';
   static const String confirmStoryScreen = '/confirm_story_screen';
 
@@ -91,6 +93,11 @@ class AppRoutes {
       page: () => ConfirmStory(),
       binding: ConfirmStoryBinding(),
     ),
+    // GetPage(
+    //   name: otherAccountScreen,
+    //   page: () => OtherAccount(),
+    //   binding: OtherAccountBinding(),
+    // ),
     GetPage(
       name: chatsScreen,
       page: () => ChatScreen(),

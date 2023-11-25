@@ -33,9 +33,14 @@ class ChatRoom extends StatelessWidget {
                 width: 10,
               ),
               Container(
-                child: CircleAvatar(
-                  backgroundImage:
-                      NetworkImage(controller.thatUser.profileImageUrl),
+                child: GestureDetector(
+                  onTap: () {
+                    controller.seeAccount(context);
+                  },
+                  child: CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(controller.thatUser.profileImageUrl),
+                  ),
                 ),
               ),
               SizedBox(

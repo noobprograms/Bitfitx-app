@@ -13,8 +13,8 @@ class AuthController extends GetxController {
   String? token = '';
   late Rx<User?> firebaseUser;
   late Rx<GoogleSignInAccount?> googleSignInAccount;
-  static usermodel.User userToStore =
-      usermodel.User(uid: '', name: '', email: '', tokenValue: '');
+  static usermodel.User userToStore = usermodel.User(
+      uid: '', name: '', email: '', tokenValue: '', following: [], fans: []);
   @override
   void onInit() {
     super.onInit();
@@ -91,18 +91,41 @@ class AuthController extends GetxController {
         );
         getNotificationToken();
         UserCredential cred = await auth.signInWithCredential(credential);
-
-        userToStore = usermodel.User(
-          uid: cred.user!.uid,
-          name: cred.user!.displayName!,
-          email: cred.user!.email!,
-          profileImageUrl: cred.user!.photoURL!,
-          tokenValue: token!,
-        );
-        await firebaseFirestore
+        firebaseFirestore
             .collection('users')
             .doc(cred.user!.uid)
-            .set(userToStore.toJson());
+            .get()
+            .then((value) async {
+          if (value.exists)
+            null;
+          else {
+            userToStore = usermodel.User(
+              uid: cred.user!.uid,
+              name: cred.user!.displayName!,
+              email: cred.user!.email!,
+              profileImageUrl: cred.user!.photoURL!,
+              following: [],
+              fans: [],
+              tokenValue: token!,
+            );
+            await firebaseFirestore
+                .collection('users')
+                .doc(cred.user!.uid)
+                .set(userToStore.toJson());
+          }
+        });
+        // userToStore = usermodel.User(
+        //   uid: cred.user!.uid,
+        //   name: cred.user!.displayName!,
+        //   email: cred.user!.email!,
+        //   profileImageUrl: cred.user!.photoURL!,
+        //   following: cred.user!.,
+        //   tokenValue: token!,
+        // );
+        // await firebaseFirestore
+        //     .collection('users')
+        //     .doc(cred.user!.uid)
+        //     .set(userToStore.toJson());
       }
     } catch (e) {
       Get.snackbar(
@@ -127,7 +150,12 @@ class AuthController extends GetxController {
           email: email, password: password);
       getNotificationToken();
       userToStore = usermodel.User(
-          uid: cred.user!.uid, name: name, email: email, tokenValue: token!);
+          uid: cred.user!.uid,
+          name: name,
+          email: email,
+          tokenValue: token!,
+          following: [],
+          fans: []);
 
       await firebaseFirestore
           .collection('users')

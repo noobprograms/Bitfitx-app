@@ -6,8 +6,8 @@ class User {
   String email;
   String profileImageUrl;
   String coverImageUrl;
-  String following;
-  String fans;
+  List following;
+  List fans;
   String posts;
   String tokenValue;
 
@@ -17,8 +17,8 @@ class User {
       required this.email,
       this.profileImageUrl = '',
       this.coverImageUrl = '',
-      this.following = "0",
-      this.fans = "0",
+      required this.following,
+      required this.fans,
       this.posts = "0",
       required this.tokenValue});
   void updateUser(

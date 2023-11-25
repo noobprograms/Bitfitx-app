@@ -1,5 +1,6 @@
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/data/models/reels_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:video_player/video_player.dart';
@@ -8,7 +9,7 @@ class ReelsController extends GetxController {
   final Rx<List<Reel>> _videoList = Rx<List<Reel>>([]);
 
   List<Reel> get videoList => _videoList.value;
-
+  TextEditingController commentController = TextEditingController();
   @override
   void onInit() async {
     super.onInit();

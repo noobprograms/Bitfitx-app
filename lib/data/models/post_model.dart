@@ -9,6 +9,8 @@ class Post {
   String postPictureUrl;
   String comments;
   String likes;
+  String onSale;
+  String price;
 
   static final defaultDate = DateTime.now();
   Post({
@@ -19,6 +21,8 @@ class Post {
     this.content = '',
     this.comments = '0',
     this.likes = '0',
+    this.onSale = 'false',
+    this.price = '0.0',
   });
 
   Map<String, dynamic> toJson() {
@@ -30,6 +34,8 @@ class Post {
       'content': content,
       'comments': comments,
       'likes': likes,
+      'onSale': onSale,
+      'price': price,
     };
   }
 }

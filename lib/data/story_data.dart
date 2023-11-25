@@ -8,6 +8,8 @@ User user = User(
   profileImageUrl:
       'http://m.gettywallpapers.com/wp-content/uploads/2021/03/Cool-HD-Wallpaper.jpg',
   coverImageUrl: 'null',
+  fans: [],
+  following: [],
   email: 'null',
 );
 
@@ -43,6 +45,8 @@ List<UserStoryList> storyListUser = [
         coverImageUrl: 'one thing',
         email: 'one thing',
         name: 'The Flutter Pro fit',
+        fans: [],
+        following: [],
         profileImageUrl:
             'http://m.gettywallpapers.com/wp-content/uploads/2021/03/Cool-HD-Wallpaper.jpg',
       ),

@@ -152,7 +152,7 @@ class AccountScreen extends StatelessWidget {
                                   ),
                                   Column(
                                     children: [
-                                      Text(myuser!['fans'],
+                                      Text(myuser!['fans'].length.toString(),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 24,
@@ -169,7 +169,10 @@ class AccountScreen extends StatelessWidget {
                                   ),
                                   Column(
                                     children: [
-                                      Text(myuser!['following'],
+                                      Text(
+                                          myuser!['following']
+                                              .length
+                                              .toString(),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 24,

@@ -15,6 +15,7 @@ class AccountController extends GetxController {
   RxString coverImageToDisplay = ImageConstant.imageNotFound.obs;
   RxString? profileImageToDisplay;
   RxBool coverImageExists = false.obs;
+  RxBool isFollowed = false.obs;
   var myUser;
   void onInit() async {
     super.onInit();

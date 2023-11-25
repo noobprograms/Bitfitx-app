@@ -75,8 +75,9 @@ class PostCard extends StatelessWidget {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(myuser!['profileImageUrl']),
+                          backgroundImage: NetworkImage(
+                            myuser!['profileImageUrl'],
+                          ),
                         ),
                         SizedBox(
                           width: 10,
