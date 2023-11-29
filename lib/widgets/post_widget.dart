@@ -20,6 +20,8 @@ class PostCard extends StatelessWidget {
       this.comments,
       this.time,
       this.uid,
+      this.interact,
+      this.groupPost = false,
       super.key});
   final postImageUrl;
   final currentUser;
@@ -29,7 +31,8 @@ class PostCard extends StatelessWidget {
   final time;
   final uid;
   final postID;
-
+  final interact;
+  bool groupPost;
   HomeController controller = Get.find();
 
   @override
@@ -110,7 +113,8 @@ class PostCard extends StatelessWidget {
                             height: 20,
                           ),
                           onPressed: () {
-                            controller.increaseLikes(postID);
+                            if (interact)
+                              controller.increaseLikes(postID, groupPost);
                           },
                         ),
                         Column(
@@ -139,171 +143,248 @@ class PostCard extends StatelessWidget {
                             height: 20,
                           ),
                           onPressed: () {
-                            Get.bottomSheet(
-                              Container(
-                                height: 350,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            CustomTextFormField(
-                                              width: 250,
-                                              hintText: 'Enter a comment',
-                                              controller:
-                                                  controller.commentController,
-                                            ),
-                                            IconButton(
-                                                onPressed: () async {
-                                                  var result =
+                            if (interact) {
+                              Get.bottomSheet(
+                                Container(
+                                  height: 350,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              CustomTextFormField(
+                                                width: 250,
+                                                hintText: 'Enter a comment',
+                                                controller: controller
+                                                    .commentController,
+                                              ),
+                                              IconButton(
+                                                  onPressed: () async {
+                                                    if (!groupPost) {
+                                                      var result =
+                                                          await firebaseFirestore
+                                                              .collection(
+                                                                  'comments')
+                                                              .doc(postID)
+                                                              .collection(
+                                                                  'allComments')
+                                                              .get();
+
+                                                      var len =
+                                                          result.docs!.length;
+                                                      var commentID =
+                                                          'comment${len}';
+                                                      var comment = CommentPost(
+                                                          commentID,
+                                                          controller
+                                                              .commentController
+                                                              .text,
+                                                          uid,
+                                                          currentUser
+                                                              .profileImageUrl,
+                                                          currentUser.name,
+                                                          Timestamp.now());
+                                                      controller
+                                                          .commentController
+                                                          .text = '';
                                                       await firebaseFirestore
                                                           .collection(
                                                               'comments')
                                                           .doc(postID)
                                                           .collection(
-                                                              'allComments')
-                                                          .get();
+                                                              "allComments")
+                                                          .doc(commentID)
+                                                          .set(
+                                                              comment.toJson());
 
-                                                  var len = result.docs!.length;
-                                                  var commentID =
-                                                      'comment${len}';
-                                                  var comment = CommentPost(
-                                                      commentID,
-                                                      controller
-                                                          .commentController
-                                                          .text,
-                                                      uid,
-                                                      currentUser
-                                                          .profileImageUrl,
-                                                      currentUser.name,
-                                                      Timestamp.now());
-                                                  controller.commentController
-                                                      .text = '';
-                                                  await firebaseFirestore
-                                                      .collection('comments')
-                                                      .doc(postID)
-                                                      .collection("allComments")
-                                                      .doc(commentID)
-                                                      .set(comment.toJson());
-
-                                                  var currentPost =
+                                                      var currentPost =
+                                                          await firebaseFirestore
+                                                              .collection(
+                                                                  'posts')
+                                                              .doc(postID)
+                                                              .get();
+                                                      var newComments = 1 +
+                                                          int.parse(currentPost
+                                                                  .data()![
+                                                              'comments']);
                                                       await firebaseFirestore
                                                           .collection('posts')
                                                           .doc(postID)
-                                                          .get();
-                                                  var newComments = 1 +
-                                                      int.parse(currentPost
-                                                          .data()!['comments']);
-                                                  await firebaseFirestore
-                                                      .collection('posts')
-                                                      .doc(postID)
-                                                      .update({
-                                                    "comments":
-                                                        newComments.toString()
-                                                  });
-                                                },
-                                                icon: Icon(Icons.send))
-                                          ],
+                                                          .update({
+                                                        "comments": newComments
+                                                            .toString()
+                                                      });
+                                                    } else {
+                                                      var result =
+                                                          await firebaseFirestore
+                                                              .collection(
+                                                                  'group_comments')
+                                                              .doc(postID)
+                                                              .collection(
+                                                                  'allComments')
+                                                              .get();
+
+                                                      var len =
+                                                          result.docs!.length;
+                                                      var commentID =
+                                                          'comment${len}';
+                                                      var comment = CommentPost(
+                                                          commentID,
+                                                          controller
+                                                              .commentController
+                                                              .text,
+                                                          uid,
+                                                          currentUser
+                                                              .profileImageUrl,
+                                                          currentUser.name,
+                                                          Timestamp.now());
+                                                      controller
+                                                          .commentController
+                                                          .text = '';
+                                                      await firebaseFirestore
+                                                          .collection(
+                                                              'group_comments')
+                                                          .doc(postID)
+                                                          .collection(
+                                                              "allComments")
+                                                          .doc(commentID)
+                                                          .set(
+                                                              comment.toJson());
+
+                                                      var currentPost =
+                                                          await firebaseFirestore
+                                                              .collection(
+                                                                  'group_posts')
+                                                              .doc(postID)
+                                                              .get();
+                                                      var newComments = 1 +
+                                                          int.parse(currentPost
+                                                                  .data()![
+                                                              'comments']);
+                                                      await firebaseFirestore
+                                                          .collection(
+                                                              'group_posts')
+                                                          .doc(postID)
+                                                          .update({
+                                                        "comments": newComments
+                                                            .toString()
+                                                      });
+                                                    }
+                                                  },
+                                                  icon: Icon(Icons.send))
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      StreamBuilder(
-                                          stream: firebaseFirestore
-                                              .collection('comments')
-                                              .doc(postID)
-                                              .collection('allComments')
-                                              .orderBy('timestamp',
-                                                  descending: true)
-                                              .snapshots(),
-                                          builder: ((context, snapshot) {
-                                            if (snapshot.hasError)
-                                              return Text(
-                                                  'Error${snapshot.error}');
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting)
-                                              return Text('Loading...');
-                                            if (!snapshot.hasData) {
-                                              print(snapshot.hasData);
-                                              return Container(
-                                                  child: Text(
-                                                'No Comments!!. Be the first to comment.',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 120),
-                                              ));
-                                            } else {
-                                              return ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    NeverScrollableScrollPhysics(),
-                                                itemCount:
-                                                    snapshot.data!.docs.length,
-                                                itemBuilder: (context, index) =>
-                                                    Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(snapshot
+                                        StreamBuilder(
+                                            stream: groupPost
+                                                ? firebaseFirestore
+                                                    .collection('comments')
+                                                    .doc(postID)
+                                                    .collection('allComments')
+                                                    .orderBy('timestamp',
+                                                        descending: true)
+                                                    .snapshots()
+                                                : firebaseFirestore
+                                                    .collection(
+                                                        'group_comments')
+                                                    .doc(postID)
+                                                    .collection('allComments')
+                                                    .orderBy('timestamp',
+                                                        descending: true)
+                                                    .snapshots(),
+                                            builder: ((context, snapshot) {
+                                              if (snapshot.hasError)
+                                                return Text(
+                                                    'Error${snapshot.error}');
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting)
+                                                return Text('Loading...');
+                                              if (!snapshot.hasData) {
+                                                print(snapshot.hasData);
+                                                return Container(
+                                                    child: Text(
+                                                  'No Comments!!. Be the first to comment.',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 120),
+                                                ));
+                                              } else {
+                                                return ListView.builder(
+                                                  shrinkWrap: true,
+                                                  physics:
+                                                      NeverScrollableScrollPhysics(),
+                                                  itemCount: snapshot
+                                                      .data!.docs.length,
+                                                  itemBuilder:
+                                                      (context, index) =>
+                                                          Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: CircleAvatar(
+                                                            backgroundImage:
+                                                                NetworkImage(snapshot
+                                                                        .data!
+                                                                        .docs[index]
+                                                                        .data()[
+                                                                    'profileImageUrl']),
+                                                          ),
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              child: Text(
+                                                                snapshot.data!
+                                                                    .docs[index]
+                                                                    .data()['name'],
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              child: Text(snapshot
                                                                       .data!
                                                                       .docs[index]
                                                                       .data()[
-                                                                  'profileImageUrl']),
+                                                                  'content']),
+                                                            )
+                                                          ],
                                                         ),
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            child: Text(
-                                                              snapshot.data!
-                                                                  .docs[index]
-                                                                  .data()['name'],
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            child: Text(snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                    .data()[
-                                                                'content']),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            }
-                                          }))
-                                    ],
+                                                );
+                                              }
+                                            }))
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              backgroundColor:
-                                  Color.fromARGB(202, 128, 144, 151),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            );
+                                backgroundColor:
+                                    Color.fromARGB(202, 128, 144, 151),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              );
+                            }
                           },
                         ),
                         Column(

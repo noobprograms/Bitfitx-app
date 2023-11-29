@@ -1,3 +1,4 @@
+import 'package:bitfitx_project/core/utils/image_constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 import '../../data/models/user_model.dart' as userModel;
 import '../../googleauth/controller/auth_controller.dart';
 
@@ -19,3 +21,6 @@ Future<SharedPreferences> prefs = SharedPreferences.getInstance();
 //requestion the permission for push notifications
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+VideoPlayerController eliteVideoController =
+    VideoPlayerController.asset(ImageConstant.testVideo);

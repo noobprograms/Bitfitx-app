@@ -14,7 +14,13 @@ class AuthController extends GetxController {
   late Rx<User?> firebaseUser;
   late Rx<GoogleSignInAccount?> googleSignInAccount;
   static usermodel.User userToStore = usermodel.User(
-      uid: '', name: '', email: '', tokenValue: '', following: [], fans: []);
+    uid: '',
+    name: '',
+    email: '',
+    tokenValue: '',
+    following: [],
+    fans: [],
+  );
   @override
   void onInit() {
     super.onInit();
@@ -69,7 +75,8 @@ class AuthController extends GetxController {
             coverImageUrl: value.data()!['coverImageUrl'],
             fans: value.data()!['fans'],
             following: value.data()!['following'],
-            posts: value.data()!['posts']);
+            posts: value.data()!['posts'],
+            wallet: value.data()!['wallet']);
       });
 
       Get.offAllNamed(AppRoutes.tabbedScreen,

@@ -1,3 +1,4 @@
+import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -29,6 +30,7 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   void dispose() {
     videoPlayerController.dispose();
+    print('i was disposed');
     super.dispose();
   }
 
@@ -36,13 +38,16 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: const BoxDecoration(
-        color: Colors.black,
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        width: size.width,
+        height: size.height,
+        decoration: const BoxDecoration(
+          color: Colors.black,
+        ),
+        child: VideoPlayer(videoPlayerController),
       ),
-      child: VideoPlayer(videoPlayerController),
     );
   }
 }

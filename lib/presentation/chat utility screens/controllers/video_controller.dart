@@ -1,8 +1,8 @@
+import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoController extends GetxController {
-  late VideoPlayerController videoPlayerController;
   final videoUrl = Get.arguments['url'];
   RxDouble videoDuration = 0.0.obs;
   RxDouble currentDuration = 0.0.obs;
@@ -11,19 +11,19 @@ class VideoController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    videoPlayerController =
+    eliteVideoController =
         VideoPlayerController.networkUrl(Uri.parse(videoUrl));
-    await videoPlayerController.initialize().then((value) {
+    await eliteVideoController.initialize().then((value) {
       videoStarted.value = true;
       videoDuration.value =
-          videoPlayerController.value.duration.inMilliseconds.toDouble();
+          eliteVideoController.value.duration.inMilliseconds.toDouble();
     });
-    videoPlayerController.addListener(() {
+    eliteVideoController.addListener(() {
       currentDuration.value =
-          videoPlayerController.value.position.inMilliseconds.toDouble();
-      if (videoPlayerController.value.isCompleted) {
+          eliteVideoController.value.position.inMilliseconds.toDouble();
+      if (eliteVideoController.value.isCompleted) {
         iconName.value = 'replay';
-      } else if (videoPlayerController.value.isPlaying)
+      } else if (eliteVideoController.value.isPlaying)
         iconName.value = 'pause';
       else
         iconName.value = 'play';
@@ -31,21 +31,21 @@ class VideoController extends GetxController {
   }
 
   void playPauseButtonPress() {
-    if (videoPlayerController.value.buffered.length != 0 &&
-        videoPlayerController.value.position ==
-            videoPlayerController.value.buffered[0].end) {
-      videoPlayerController.seekTo(Duration(seconds: 0));
+    if (eliteVideoController.value.buffered.length != 0 &&
+        eliteVideoController.value.position ==
+            eliteVideoController.value.buffered[0].end) {
+      eliteVideoController.seekTo(Duration(seconds: 0));
 
-      videoPlayerController.play();
+      eliteVideoController.play();
     }
-    videoPlayerController.value.isPlaying
-        ? videoPlayerController.pause()
-        : videoPlayerController.play();
+    eliteVideoController.value.isPlaying
+        ? eliteVideoController.pause()
+        : eliteVideoController.play();
   }
 
   @override
   void dispose() {
-    videoPlayerController.dispose();
+    eliteVideoController.dispose();
     super.dispose();
   }
 

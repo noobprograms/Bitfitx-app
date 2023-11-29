@@ -1,4 +1,5 @@
 import 'package:bitfitx_project/core/app_export.dart';
+import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/presentation/chat%20utility%20screens/controllers/video_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,10 +29,9 @@ class VideoFullScreen extends StatelessWidget {
                         constraints: BoxConstraints(maxHeight: 500),
                         child: controller.videoStarted.value
                             ? AspectRatio(
-                                aspectRatio: controller
-                                    .videoPlayerController.value.aspectRatio,
-                                child: VideoPlayer(
-                                    controller.videoPlayerController),
+                                aspectRatio:
+                                    eliteVideoController.value.aspectRatio,
+                                child: VideoPlayer(eliteVideoController),
                               )
                             : Container(
                                 height: 200,
@@ -43,7 +43,7 @@ class VideoFullScreen extends StatelessWidget {
                     () => Slider(
                       value: controller.currentDuration.value,
                       max: controller.videoDuration.value,
-                      onChanged: (value) => controller.videoPlayerController
+                      onChanged: (value) => eliteVideoController
                           .seekTo(Duration(milliseconds: value.toInt())),
                     ),
                   )),

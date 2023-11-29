@@ -15,6 +15,8 @@ class ImageConstant {
   static String imgRemoval1 = '$imagePath/img_removal1.png';
 
   static String imgRectangle4 = '$imagePath/google.png';
+  static String testVideo = '$imagePath/task 1 recording lab9.mp4';
+  static String commingSoon = '$imagePath/comming-soon.jfif';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
   static String likeIcon = '$imagePath/like_new_icon.png';

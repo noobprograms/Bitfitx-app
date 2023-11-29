@@ -8,8 +8,10 @@ class User {
   String coverImageUrl;
   List following;
   List fans;
+
   String posts;
   String tokenValue;
+  String wallet;
 
   User(
       {required this.uid,
@@ -17,6 +19,7 @@ class User {
       required this.email,
       this.profileImageUrl = '',
       this.coverImageUrl = '',
+      this.wallet = '0.0',
       required this.following,
       required this.fans,
       this.posts = "0",
@@ -43,6 +46,7 @@ class User {
       'profileImageUrl': profileImageUrl,
       'coverImageUrl': coverImageUrl,
       'following': following,
+      'wallet': wallet,
       'fans': fans,
       'posts': posts,
       'tokenValue': tokenValue

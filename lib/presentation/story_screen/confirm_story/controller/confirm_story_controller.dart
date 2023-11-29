@@ -64,7 +64,8 @@ class ConfirmStoryController extends GetxController {
           barrierDismissible: false);
       var allDocs = await firebaseFirestore.collection('stories').get();
       int len = allDocs.docs.length;
-      String storyUrl = await _uploadStoryToStorage("Story $len", asset);
+      String newId = "Story $len";
+      String storyUrl = await _uploadStoryToStorage(newId, asset);
       MediaType mediaType;
       Duration storyDuration = Duration(seconds: 15);
       if (isVideo) {
@@ -74,14 +75,43 @@ class ConfirmStoryController extends GetxController {
         mediaType = MediaType.image;
 
       Story story = Story(
+          sid: newId,
           url: storyUrl,
           media: mediaType,
           duration: storyDuration,
-          user: thisUser);
+          name: thisUser.name,
+          profileImageUrl: thisUser.profileImageUrl,
+          uid: thisUser.uid,
+          timeUploaded: Timestamp.now());
 
-      await firebaseFirestore.collection('stories').doc('Story $len').set(
+      await firebaseFirestore.collection('stories').doc(newId).set(
             story.toJson(),
           );
+      var previousStories;
+      var result = await firebaseFirestore
+          .collection('stories_live')
+          .doc(thisUser.uid)
+          .get();
+      if (result.exists) {
+        previousStories = result.data()!['stories'];
+        previousStories.add(newId);
+        await firebaseFirestore
+            .collection('stories_live')
+            .doc(thisUser.uid)
+            .update({'stories': previousStories});
+      } else {
+        previousStories = [newId];
+        await firebaseFirestore
+            .collection('stories_live')
+            .doc(thisUser.uid)
+            .set({
+          'name': thisUser.name,
+          'profileImageUrl': thisUser.profileImageUrl,
+          'uid': thisUser.uid,
+          'stories': previousStories
+        });
+      }
+
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

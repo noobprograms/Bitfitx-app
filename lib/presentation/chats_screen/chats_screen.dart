@@ -141,22 +141,25 @@ class ChatScreen extends StatelessWidget {
                                         // print(
                                         //     'I am ${controller.searchResults.value[index]["name"]}');
                                         var instantUser = User(
-                                            uid: controller.searchResults.value[index]
-                                                ['uid'],
-                                            name: controller.searchResults.value[index]
-                                                ['name'],
-                                            email: controller.searchResults
-                                                .value[index]['email'],
-                                            profileImageUrl:
-                                                controller.searchResults.value[index]
-                                                    ['profileImageUrl'],
-                                            coverImageUrl: controller
-                                                .searchResults
-                                                .value[index]['coverImageUrl'],
-                                            tokenValue: controller.searchResults
-                                                .value[index]['tokenValue'],
-                                            following: controller.searchResults.value[index]['following'],
-                                            fans: controller.searchResults.value[index]['fans']);
+                                          uid: controller.searchResults
+                                              .value[index]['uid'],
+                                          name: controller.searchResults
+                                              .value[index]['name'],
+                                          email: controller.searchResults
+                                              .value[index]['email'],
+                                          profileImageUrl: controller
+                                              .searchResults
+                                              .value[index]['profileImageUrl'],
+                                          coverImageUrl: controller
+                                              .searchResults
+                                              .value[index]['coverImageUrl'],
+                                          tokenValue: controller.searchResults
+                                              .value[index]['tokenValue'],
+                                          following: controller.searchResults
+                                              .value[index]['following'],
+                                          fans: controller.searchResults
+                                              .value[index]['fans'],
+                                        );
                                         return GestureDetector(
                                           onTap: () {
                                             controller
@@ -207,19 +210,19 @@ class ChatScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         print(index);
                         var instantUser = User(
-                            uid: controller.allChatRooms.value[index]['uid'],
-                            name: controller.allChatRooms.value[index]['name'],
-                            email: controller.allChatRooms.value[index]
-                                ['email'],
-                            profileImageUrl: controller
-                                .allChatRooms.value[index]['profileImageUrl'],
-                            coverImageUrl: controller.allChatRooms.value[index]
-                                ['coverImageUrl'],
-                            tokenValue: controller.allChatRooms.value[index]
-                                ['tokenValue'],
-                            following: controller.allChatRooms.value[index]
-                                ['following'],
-                            fans: controller.allChatRooms.value[index]['fans']);
+                          uid: controller.allChatRooms.value[index]['uid'],
+                          name: controller.allChatRooms.value[index]['name'],
+                          email: controller.allChatRooms.value[index]['email'],
+                          profileImageUrl: controller.allChatRooms.value[index]
+                              ['profileImageUrl'],
+                          coverImageUrl: controller.allChatRooms.value[index]
+                              ['coverImageUrl'],
+                          tokenValue: controller.allChatRooms.value[index]
+                              ['tokenValue'],
+                          following: controller.allChatRooms.value[index]
+                              ['following'],
+                          fans: controller.allChatRooms.value[index]['fans'],
+                        );
                         return GestureDetector(
                           onTap: () {
                             controller.goToChatRoom(instantUser);

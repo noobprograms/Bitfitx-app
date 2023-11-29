@@ -1,3 +1,4 @@
+import 'package:bitfitx_project/.env';
 import 'package:bitfitx_project/core/utils/notification_service.dart';
 import 'package:bitfitx_project/firebase_options.dart';
 import 'package:bitfitx_project/presentation/splash_screen/binding/splash_binding.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:flutter_notification_channel/notification_visibility.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'core/app_export.dart';
@@ -24,6 +26,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Stripe.publishableKey = stripePublishableKey;
+  await Stripe.instance.applySettings();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

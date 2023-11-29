@@ -43,154 +43,166 @@ class MessageBubble extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   width: MediaQuery.of(context).size.width * 0.33,
                   decoration: decoration,
-                  child: Expanded(
-                      child: data['type'] == 'text'
-                          ? Text(
-                              data['message'],
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            )
-                          : data['type'] == 'image'
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => ImageFullScreen(
-                                                data['asset'])));
-                                  },
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: CachedNetworkImage(
-                                        imageUrl: data['asset'],
-                                        placeholder: (_, url) => Image.asset(
-                                          ImageConstant.imageNotFound,
-                                          color: Colors.white,
-                                        ),
-                                      )),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: data['type'] == 'text'
+                              ? Text(
+                                  data['message'],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
                                 )
-                              : data['type'] == 'video'
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Stack(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            children: [
-                                              Container(
-                                                width: 130,
-                                                height: 80,
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Icon(
-                                                    Icons.videocam,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    data['message'],
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 40,
-                                            child: IconButton(
-                                              icon: Icon(Icons.play_arrow),
+                              : data['type'] == 'image'
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => ImageFullScreen(
+                                                    data['asset'])));
+                                      },
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: CachedNetworkImage(
+                                            imageUrl: data['asset'],
+                                            placeholder: (_, url) =>
+                                                Image.asset(
+                                              ImageConstant.imageNotFound,
                                               color: Colors.white,
-                                              onPressed: () {
-                                                Get.toNamed(
-                                                    AppRoutes.videoFullScreen,
-                                                    arguments: {
-                                                      'url': data["asset"]
-                                                    });
-                                              },
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          )),
                                     )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Stack(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.black,
-                                                height: 80,
+                                  : data['type'] == 'video'
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                children: [
+                                                  Container(
+                                                    width: 130,
+                                                    height: 80,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.videocam,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        data['message'],
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                              Column(
+                                              Container(
+                                                height: 40,
+                                                child: IconButton(
+                                                  icon: Icon(Icons.play_arrow),
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    Get.toNamed(
+                                                        AppRoutes
+                                                            .videoFullScreen,
+                                                        arguments: {
+                                                          'url': data["asset"]
+                                                        });
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: <Widget>[
+                                              Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
                                                 children: <Widget>[
-                                                  Icon(
-                                                    Icons.insert_drive_file,
+                                                  Container(
+                                                    color: Colors.black,
+                                                    height: 80,
+                                                  ),
+                                                  Column(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.insert_drive_file,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(data['message'],
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.white,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                height: 40,
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.file_download,
                                                     color: Colors.white,
                                                   ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(data['message'],
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.white,
-                                                      )),
-                                                ],
+                                                  onPressed: () async {
+                                                    var directory;
+                                                    if (Platform.isIOS)
+                                                      directory =
+                                                          await getDownloadsDirectory();
+                                                    else
+                                                      directory =
+                                                          '/storage/emulated/0/Download/';
+                                                    if (await Directory(
+                                                            directory)
+                                                        .exists()) {
+                                                      directory =
+                                                          "/storage/emulated/0/Download/";
+                                                    } else {
+                                                      directory =
+                                                          "/storage/emulated/0/Downloads/";
+                                                    }
+                                                    await FlutterDownloader
+                                                        .enqueue(
+                                                      url: data['asset'],
+                                                      fileName: data['message'],
+                                                      savedDir: directory,
+                                                      showNotification: true,
+                                                      // show download progress in status bar (for Android)
+                                                      openFileFromNotification:
+                                                          true, // click on notification to open downloaded file (for Android)
+                                                    );
+                                                    ;
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           ),
-                                          Container(
-                                            height: 40,
-                                            child: IconButton(
-                                              icon: Icon(
-                                                Icons.file_download,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () async {
-                                                var directory;
-                                                if (Platform.isIOS)
-                                                  directory =
-                                                      await getDownloadsDirectory();
-                                                else
-                                                  directory =
-                                                      '/storage/emulated/0/Download/';
-                                                if (await Directory(directory)
-                                                    .exists()) {
-                                                  directory =
-                                                      "/storage/emulated/0/Download/";
-                                                } else {
-                                                  directory =
-                                                      "/storage/emulated/0/Downloads/";
-                                                }
-                                                await FlutterDownloader.enqueue(
-                                                  url: data['asset'],
-                                                  fileName: data['message'],
-                                                  savedDir: directory,
-                                                  showNotification: true,
-                                                  // show download progress in status bar (for Android)
-                                                  openFileFromNotification:
-                                                      true, // click on notification to open downloaded file (for Android)
-                                                );
-                                                ;
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
+                                        )),
+                    ],
+                  ),
                 ),
               ),
               Padding(
@@ -227,154 +239,166 @@ class MessageBubble extends StatelessWidget {
                   padding: EdgeInsets.all(8),
                   width: MediaQuery.of(context).size.width * 0.33,
                   decoration: decoration,
-                  child: Expanded(
-                      child: data['type'] == 'text'
-                          ? Text(
-                              data['message'],
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            )
-                          : data['type'] == 'image'
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => ImageFullScreen(
-                                                data['asset'])));
-                                  },
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: CachedNetworkImage(
-                                        imageUrl: data['asset'],
-                                        placeholder: (_, url) => Image.asset(
-                                          ImageConstant.imageNotFound,
-                                          color: Colors.white,
-                                        ),
-                                      )),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: data['type'] == 'text'
+                              ? Text(
+                                  data['message'],
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
                                 )
-                              : data['type'] == 'video'
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Stack(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            children: [
-                                              Container(
-                                                width: 130,
-                                                height: 80,
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Icon(
-                                                    Icons.videocam,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(
-                                                    data['message'],
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 40,
-                                            child: IconButton(
-                                              icon: Icon(Icons.play_arrow),
+                              : data['type'] == 'image'
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) => ImageFullScreen(
+                                                    data['asset'])));
+                                      },
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: CachedNetworkImage(
+                                            imageUrl: data['asset'],
+                                            placeholder: (_, url) =>
+                                                Image.asset(
+                                              ImageConstant.imageNotFound,
                                               color: Colors.white,
-                                              onPressed: () {
-                                                Get.toNamed(
-                                                    AppRoutes.videoFullScreen,
-                                                    arguments: {
-                                                      'url': data["asset"]
-                                                    });
-                                              },
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          )),
                                     )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Stack(
-                                            alignment:
-                                                AlignmentDirectional.center,
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.black,
-                                                height: 80,
+                                  : data['type'] == 'video'
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
+                                                children: [
+                                                  Container(
+                                                    width: 130,
+                                                    height: 80,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.videocam,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                        data['message'],
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                              Column(
+                                              Container(
+                                                height: 40,
+                                                child: IconButton(
+                                                  icon: Icon(Icons.play_arrow),
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    Get.toNamed(
+                                                        AppRoutes
+                                                            .videoFullScreen,
+                                                        arguments: {
+                                                          'url': data["asset"]
+                                                        });
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: <Widget>[
+                                              Stack(
+                                                alignment:
+                                                    AlignmentDirectional.center,
                                                 children: <Widget>[
-                                                  Icon(
-                                                    Icons.insert_drive_file,
+                                                  Container(
+                                                    color: Colors.black,
+                                                    height: 80,
+                                                  ),
+                                                  Column(
+                                                    children: <Widget>[
+                                                      Icon(
+                                                        Icons.insert_drive_file,
+                                                        color: Colors.white,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(data['message'],
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Colors.white,
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Container(
+                                                height: 40,
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.file_download,
                                                     color: Colors.white,
                                                   ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Text(data['message'],
-                                                      style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.white,
-                                                      )),
-                                                ],
+                                                  onPressed: () async {
+                                                    var directory;
+                                                    if (Platform.isIOS)
+                                                      directory =
+                                                          await getDownloadsDirectory();
+                                                    else
+                                                      directory =
+                                                          '/storage/emulated/0/Download/';
+                                                    if (await Directory(
+                                                            directory)
+                                                        .exists()) {
+                                                      directory =
+                                                          "/storage/emulated/0/Download/";
+                                                    } else {
+                                                      directory =
+                                                          "/storage/emulated/0/Downloads/";
+                                                    }
+                                                    await FlutterDownloader
+                                                        .enqueue(
+                                                      url: data['asset'],
+                                                      fileName: data['message'],
+                                                      savedDir: directory,
+                                                      showNotification: true,
+                                                      // show download progress in status bar (for Android)
+                                                      openFileFromNotification:
+                                                          true, // click on notification to open downloaded file (for Android)
+                                                    );
+                                                    ;
+                                                  },
+                                                ),
                                               ),
                                             ],
                                           ),
-                                          Container(
-                                            height: 40,
-                                            child: IconButton(
-                                              icon: Icon(
-                                                Icons.file_download,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () async {
-                                                var directory;
-                                                if (Platform.isIOS)
-                                                  directory =
-                                                      await getDownloadsDirectory();
-                                                else
-                                                  directory =
-                                                      '/storage/emulated/0/Download/';
-                                                if (await Directory(directory)
-                                                    .exists()) {
-                                                  directory =
-                                                      "/storage/emulated/0/Download/";
-                                                } else {
-                                                  directory =
-                                                      "/storage/emulated/0/Downloads/";
-                                                }
-                                                await FlutterDownloader.enqueue(
-                                                  url: data['asset'],
-                                                  fileName: data['message'],
-                                                  savedDir: directory,
-                                                  showNotification: true,
-                                                  // show download progress in status bar (for Android)
-                                                  openFileFromNotification:
-                                                      true, // click on notification to open downloaded file (for Android)
-                                                );
-                                                ;
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
+                                        )),
+                    ],
+                  ),
                 ),
               ),
             ],

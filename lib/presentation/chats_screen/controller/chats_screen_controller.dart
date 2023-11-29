@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bitfitx_project/core/app_export.dart';
+import 'package:bitfitx_project/core/utils/agora_appID.dart';
 import 'package:bitfitx_project/core/utils/chat_service.dart';
 import 'package:bitfitx_project/data/models/user_model.dart';
 import 'package:bitfitx_project/widgets/custom_text_form_field.dart';
@@ -8,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
+import 'package:http/http.dart';
 
 class ChatsController extends GetxController {
   User currentuser = Get.arguments['currentUser'];
@@ -26,9 +29,19 @@ class ChatsController extends GetxController {
     super.dispose();
   }
 
-  void goToChatRoom(User thatUser) {
-    Get.toNamed(AppRoutes.chatRoom,
-        arguments: {'cUser': currentuser, 'tUser': thatUser});
+  void goToChatRoom(User thatUser) async {
+    List<String> ids = [currentuser.uid, thatUser.uid];
+    ids.sort();
+    String chatRoomId = ids.join('-');
+    var result =
+        await get(Uri.parse('$baseUrl/bitfitx_call/publisher/userAccount/0/'));
+    var extractedToken = jsonDecode(result.body)['rtcToken'];
+
+    Get.toNamed(AppRoutes.chatRoom, arguments: {
+      'cUser': currentuser,
+      'tUser': thatUser,
+      'callToken': extractedToken
+    });
   }
 
   void messageTextChanged(String value) {

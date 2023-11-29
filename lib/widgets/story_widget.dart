@@ -9,69 +9,68 @@ import '../core/utils/auth_constants.dart';
 
 class StoryWidget extends StatelessWidget {
   const StoryWidget(
-      {required this.goToStory,
-      this.isEdit = false,
-      required this.user,
+      {this.isEdit = false,
+      required this.uid,
+      required this.name,
+      required this.profileImageUrl,
       super.key});
-  final Function goToStory;
+
   final bool isEdit;
-  final User user;
+  final String uid;
+  final String name;
+
+  final String profileImageUrl;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        goToStory();
-      },
-      child: Padding(
-        padding: EdgeInsets.all(5),
-        child: Container(
-          padding: EdgeInsets.all(3),
-          height: 90,
-          width: 60,
-          // decoration: BoxDecoration(
-          //   shape: BoxShape.circle,
-          //   color: Colors.green,
-          // ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: !isEdit
-                        ? Border.all(color: Colors.green, width: 2)
-                        : null),
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: isEdit
-                      ? NetworkImage(
-                          user.profileImageUrl,
-                        )
-                      : NetworkImage(
-                          user.profileImageUrl,
-                        ),
-                  child: isEdit ? Center(child: Icon(Icons.add)) : null,
-                ),
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Container(
+        padding: EdgeInsets.all(3),
+        height: 90,
+        width: 60,
+        // decoration: BoxDecoration(
+        //   shape: BoxShape.circle,
+        //   color: Colors.green,
+        // ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: 60,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: !isEdit
+                      ? Border.all(color: Colors.green, width: 2)
+                      : null),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: isEdit
+                    ? NetworkImage(
+                        profileImageUrl,
+                      )
+                    : NetworkImage(
+                        profileImageUrl,
+                      ),
+                child: isEdit ? Center(child: Icon(Icons.add)) : null,
               ),
-              isEdit
-                  ? Expanded(
-                      child: Text(
-                      'Your Story',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white),
-                    ))
-                  : Expanded(
-                      child: Text(
-                      user.name,
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.white),
-                    )),
-            ],
-          ),
+            ),
+            isEdit
+                ? Expanded(
+                    child: Text(
+                    'Your Story',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                  ))
+                : Expanded(
+                    child: Text(
+                    name,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white),
+                  )),
+          ],
         ),
       ),
     );

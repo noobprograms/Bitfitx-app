@@ -12,9 +12,10 @@ import 'package:get/get.dart';
 class AddContentScreen extends StatelessWidget {
   AddContentScreen(this.cUser, {super.key});
   final User cUser;
-  AddContentController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    AddContentController controller = Get.put(AddContentController());
     controller.saveUser(cUser);
     return SafeArea(
         child: Scaffold(
@@ -137,7 +138,9 @@ class AddContentScreen extends StatelessWidget {
                 CustomElevatedButton(
                   text: 'Go Live',
                   width: 100,
-                  onTap: () {},
+                  onTap: () {
+                    controller.goLive();
+                  },
                 )
               ],
             ),

@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bitfitx_project/core/app_export.dart';
+import 'package:bitfitx_project/core/utils/agora_appID.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/data/models/post_model.dart';
 import 'package:bitfitx_project/data/models/reels_model.dart';
@@ -13,6 +15,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -23,7 +26,7 @@ class AddContentController extends GetxController {
   RxBool pictureSelected = false.obs;
   late User currentUser;
   TextEditingController postDescription = TextEditingController();
-  VideoPlayerController? videoController;
+  // VideoPlayerController? videoController;
   TextEditingController shortCaptionController = TextEditingController();
   late Duration videoDuration;
   void goToMessages(User cUser) {
@@ -236,12 +239,12 @@ class AddContentController extends GetxController {
       source: src,
       maxDuration: Duration(seconds: 30),
     );
-    videoController = VideoPlayerController.file(File(video!.path));
-    videoDuration = videoController!.value.duration;
-    videoController!.initialize();
-    videoController!.play();
-    videoController!.setVolume(1);
-    videoController!.setLooping(true);
+    eliteVideoController = VideoPlayerController.file(File(video!.path));
+    videoDuration = eliteVideoController!.value.duration;
+    eliteVideoController!.initialize();
+    eliteVideoController!.play();
+    eliteVideoController!.setVolume(1);
+    eliteVideoController!.setLooping(true);
     if (video != null) {
       Get.bottomSheet(
           SingleChildScrollView(
@@ -250,7 +253,7 @@ class AddContentController extends GetxController {
                 IconButton(
                   icon: Icon(Icons.cancel),
                   onPressed: () {
-                    videoController!.dispose();
+                    eliteVideoController!.dispose();
                     shortCaptionController.text = '';
                     Get.close(2);
                   },
@@ -261,7 +264,7 @@ class AddContentController extends GetxController {
                 SizedBox(
                     height: mediaQueryData.size.height / 1.5,
                     width: mediaQueryData.size.width,
-                    child: VideoPlayer(videoController!)),
+                    child: VideoPlayer(eliteVideoController!)),
                 Padding(
                   padding: EdgeInsets.all(8),
                   child: CustomTextFormField(
@@ -292,7 +295,7 @@ class AddContentController extends GetxController {
                             text: "Cancel",
                             width: 100,
                             onTap: () {
-                              videoController!.dispose();
+                              eliteVideoController!.dispose();
                               shortCaptionController.text = '';
                               Get.close(2);
                             },
@@ -342,13 +345,22 @@ class AddContentController extends GetxController {
         .collection('reels')
         .doc(reelId)
         .set(newReel.toJson());
-    videoController?.dispose();
+    eliteVideoController?.dispose();
     Get.close(3);
+  }
+
+  void goLive() async {
+    print('the token is to check');
+    var result =
+        await get(Uri.parse('$baseUrl/bitfitx_live/publisher/userAccount/0/'));
+    var extractedToken = jsonDecode(result.body)['rtcToken'];
+    Get.toNamed(AppRoutes.liveScreen,
+        arguments: {'cUser': currentUser, 'extractedToken': extractedToken});
   }
 
   @override
   void onClose() {
     super.onClose();
-    videoController?.dispose();
+    eliteVideoController?.dispose();
   }
 }

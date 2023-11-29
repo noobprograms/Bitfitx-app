@@ -1,4 +1,5 @@
 import 'package:bitfitx_project/core/app_export.dart';
+import 'package:bitfitx_project/core/utils/agora_appID.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/core/utils/size_utils.dart';
 import 'package:bitfitx_project/data/models/user_model.dart';
@@ -7,18 +8,20 @@ import 'package:bitfitx_project/googleauth/controller/auth_controller.dart';
 import 'package:bitfitx_project/presentation/account_screen/otherAccount_screen.dart';
 import 'package:bitfitx_project/presentation/home_screen/controller/home_controller.dart';
 import 'package:bitfitx_project/widgets/custom_elevated_button.dart';
+import 'package:bitfitx_project/widgets/live_user_widget.dart';
 import 'package:bitfitx_project/widgets/post_widget.dart';
 import 'package:bitfitx_project/widgets/story_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 
 class Home extends StatelessWidget {
   Home(this.cUser, {super.key});
   final cUser;
-  HomeController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.put(HomeController());
     mediaQueryData = MediaQuery.of(context);
     print('this is home ${cUser.tokenValue!}');
     controller.getAllUsers(cUser);
@@ -175,24 +178,90 @@ class Home extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 120,
-                  child: ListView.builder(
-                    itemCount: storyListUser.length + 1,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      if (index == 0)
-                        return StoryWidget(
-                          goToStory: () {
-                            controller.addStory(cUser, context);
-                          },
-                          user: cUser,
-                          isEdit: true,
-                        );
-                      else
-                        return StoryWidget(
-                          goToStory: controller.openStory,
-                          user: storyListUser[index - 1].user,
-                        );
-                    },
+                  child: Row(
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              controller.addStory(cUser, context);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                height: 90,
+                                width: 60,
+                                // decoration: BoxDecoration(
+                                //   shape: BoxShape.circle,
+                                //   color: Colors.green,
+                                // ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                          cUser.profileImageUrl,
+                                        ),
+                                        child: Center(child: Icon(Icons.add)),
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                      'Your Story',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      StreamBuilder(
+                          stream: firebaseFirestore
+                              .collection('stories_live')
+                              .where('uid', isNotEqualTo: cUser.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError)
+                              return Text('Error${snapshot.error}');
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting)
+                              return Text('Loading...');
+                            if (snapshot.hasData) {
+                              return Row(
+                                children: snapshot.data!.docs
+                                    .map((e) => GestureDetector(
+                                          onTap: () {
+                                            controller.openStory(
+                                                e.data()!['name'],
+                                                e.data()!['profileImageUrl'],
+                                                e.data()!['uid'],
+                                                snapshot.data!.docs);
+                                          },
+                                          child: StoryWidget(
+                                            name: e.data()!['name'],
+                                            profileImageUrl:
+                                                e.data()!['profileImageUrl'],
+                                            uid: e.data()!['uid'],
+                                            isEdit: false,
+                                          ),
+                                        ))
+                                    .toList(),
+                              );
+                            } else
+                              return Container();
+                          })
+                    ],
                   ),
                 ),
                 Padding(
@@ -203,13 +272,44 @@ class Home extends StatelessWidget {
                     style: CustomTextStyles.headlineLargeOnPrimaryContainer,
                   ),
                 ),
-                ////////////////////////////////////////////////////////////
-                ///
-                ///
-                ///
-                ///
-                ///////////////////////////////////////////////////////////
-                ///
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: StreamBuilder(
+                        stream: firebaseFirestore
+                            .collection('liveusers')
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError)
+                            return Text('Error${snapshot.error}');
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting)
+                            return Text('Loading...');
+                          if (snapshot.hasData) {
+                            var myList = snapshot.data!.docs;
+                            return Row(
+                              children: myList
+                                  .map((e) => LiveUserWidget(
+                                      coverImage: e['coverImageUrl'],
+                                      profileImage: e['profileImageUrl'],
+                                      name: e['name'],
+                                      tokenValue: e['token'],
+                                      channelName: e['channelName']))
+                                  .toList(),
+                            );
+                          } else
+                            return Center(
+                              child: Text(
+                                'No one is live right now',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            );
+                        }),
+                  ),
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
@@ -221,6 +321,20 @@ class Home extends StatelessWidget {
                         style: CustomTextStyles.headlineLargeOnPrimaryContainer,
                       ),
                       CustomElevatedButton(
+                        onTap: () async {
+                          // Get.toNamed(AppRoutes.marketplace,
+                          //     arguments: {'cUser': cUser});
+
+                          Get.dialog(Container(
+                              height: 200,
+                              width: mediaQueryData.size.width / 2,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image:
+                                        AssetImage(ImageConstant.commingSoon)),
+                              )));
+                        },
                         text: 'Buy Posts',
                         width: 141,
                         buttonStyle: ElevatedButton.styleFrom(
@@ -229,8 +343,7 @@ class Home extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                Container(
                   child: StreamBuilder(
                     stream: firebaseFirestore
                         .collection('posts')
@@ -244,23 +357,22 @@ class Home extends StatelessWidget {
                       if (snapshot.hasData) {
                         var myList = snapshot.data!.docs;
                         print(myList.length);
-                        return Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            // shrinkWrap: true,
-                            children: myList.map((doc) {
-                              return PostCard(
-                                currentUser: cUser,
-                                postID: doc.data()['pid'],
-                                postImageUrl: doc.data()['postPictureUrl'],
-                                description: doc.data()['content'],
-                                time: doc.data()['dateTime'],
-                                likes: doc.data()['likes'],
-                                comments: doc.data()['comments'],
-                                uid: doc.data()['uid'],
-                              );
-                            }).toList(),
-                          ),
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // shrinkWrap: true,
+                          children: myList.map((doc) {
+                            return PostCard(
+                              currentUser: cUser,
+                              postID: doc.data()['pid'],
+                              postImageUrl: doc.data()['postPictureUrl'],
+                              description: doc.data()['content'],
+                              time: doc.data()['dateTime'],
+                              likes: doc.data()['likes'],
+                              comments: doc.data()['comments'],
+                              uid: doc.data()['uid'],
+                              interact: true,
+                            );
+                          }).toList(),
                         );
                       } else {
                         return Center(child: Text('No posts to display'));

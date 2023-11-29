@@ -1,4 +1,6 @@
+import 'package:agora_uikit/agora_uikit.dart';
 import 'package:bitfitx_project/core/app_export.dart';
+import 'package:bitfitx_project/core/utils/agora_appID.dart';
 import 'package:bitfitx_project/core/utils/auth_constants.dart';
 import 'package:bitfitx_project/core/utils/notification_service.dart';
 import 'package:bitfitx_project/data/models/comment_model.dart';
@@ -14,10 +16,17 @@ class HomeController extends GetxController {
   var commentController = TextEditingController();
   TextEditingController searchUserInput = TextEditingController();
   RxList searchResults = [].obs;
+  List followings = [];
 
   RxList allUsers = [].obs;
-  void openStory() {
-    Get.toNamed(AppRoutes.storyScreen);
+  void openStory(String name, String profileImageUrl, String uid,
+      List stories_collection) {
+    Get.toNamed(AppRoutes.storyScreen, arguments: {
+      'stories_list': stories_collection,
+      'name': name,
+      'uid': uid,
+      'profileImageUrl': profileImageUrl
+    });
   }
 
   void goToMessages(User cUser) {
@@ -35,6 +44,7 @@ class HomeController extends GetxController {
         allUsers.add(element.data());
       },
     );
+    followings = cUser.following;
   }
 
   ///////searching functionality////////
@@ -139,13 +149,26 @@ class HomeController extends GetxController {
     return result;
   }
 
-  void increaseLikes(String pid) async {
-    var result = await firebaseFirestore.collection('posts').doc(pid).get();
-    var currentLikes = int.parse(result.data()!['likes']);
-    var newLikes = currentLikes + 1;
-    await firebaseFirestore
-        .collection('posts')
-        .doc(pid)
-        .update({'likes': (newLikes).toString()});
+  void increaseLikes(String pid, bool isGroup) async {
+    if (!isGroup) {
+      var result = await firebaseFirestore.collection('posts').doc(pid).get();
+      var currentLikes = int.parse(result.data()!['likes']);
+      var newLikes = currentLikes + 1;
+      await firebaseFirestore
+          .collection('posts')
+          .doc(pid)
+          .update({'likes': (newLikes).toString()});
+    } else {
+      var result =
+          await firebaseFirestore.collection('group_posts').doc(pid).get();
+      var currentLikes = int.parse(result.data()!['likes']);
+      var newLikes = currentLikes + 1;
+      await firebaseFirestore
+          .collection('group_posts')
+          .doc(pid)
+          .update({'likes': (newLikes).toString()});
+    }
   }
+
+  ///live
 }

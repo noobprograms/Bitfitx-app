@@ -126,7 +126,7 @@ class AccountController extends GetxController {
       Reference ref = firebaseStorage
           .ref()
           .child('pictures')
-          .child(currentUser!.coverImageUrl)
+          .child(currentUser!.uid)
           .child('coverPicture');
 
       // if (coverImageToDisplay.value != 'assets/images/image_not_found.png') {

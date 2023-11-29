@@ -17,7 +17,7 @@ class AppDecoration {
           end: Alignment(0.95, 1),
           colors: [
             appTheme.black900,
-            appTheme.black900.withOpacity(0),
+            appTheme.black900.withOpacity(1),
           ],
         ),
       );

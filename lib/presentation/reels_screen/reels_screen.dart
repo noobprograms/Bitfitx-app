@@ -18,9 +18,10 @@ import 'package:video_player/video_player.dart';
 class ReelsScreen extends StatelessWidget {
   ReelsScreen(this.cUser, {super.key});
   User cUser;
-  ReelsController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    ReelsController controller = Get.put(ReelsController());
     final size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.black,

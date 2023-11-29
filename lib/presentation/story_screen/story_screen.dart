@@ -20,7 +20,7 @@ class StoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
 
-    final Story story = controller.allStories[controller.currentIndex.value];
+    final Story story = controller.allStories![controller.currentIndex.value];
     return Scaffold(
       backgroundColor: Colors.black,
       body: ValueListenableBuilder(
@@ -29,10 +29,10 @@ class StoryScreen extends StatelessWidget {
           return PageView.builder(
             controller: controller.pageController,
             physics: const ClampingScrollPhysics(),
-            itemCount: storyListUser.length,
+            itemCount: controller.storyListUser.length,
             itemBuilder: (context, index) {
-              final isLeaving = (index - value) <= 0;
-              final t = index - value;
+              final isLeaving = (index - (value as num)) <= 0;
+              final t = index - (value as double);
               final rotationY = lerpDouble(0, 90, t);
               final opacity = lerpDouble(0, 1, t.abs())!.clamp(0.0, 1.0);
               final transform = Matrix4.identity();
@@ -59,10 +59,12 @@ class StoryScreen extends StatelessWidget {
                           PageView.builder(
                               controller: controller.childPageController,
                               physics: NeverScrollableScrollPhysics(),
-                              itemCount: storyListUser[index].story.length,
+                              itemCount: controller.storyListUser[index]
+                                  .data()['stories']
+                                  .length,
                               itemBuilder: (context, index) {
                                 final Story story =
-                                    controller.allStories[index];
+                                    controller.allStories![index];
                                 switch (story.media) {
                                   case MediaType.image:
                                     return CachedNetworkImage(
@@ -113,7 +115,7 @@ class StoryScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    children: controller.allStories
+                                    children: controller.allStories!
                                         .asMap()
                                         .map((key, value) {
                                           return MapEntry(
@@ -140,9 +142,14 @@ class StoryScreen extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: UserInfo(
-                                              user: storyListUser[index].user,
-                                              timeUploaded: storyListUser[index]
-                                                  .story[controller
+                                              username: controller
+                                                  .storyListUser[index]
+                                                  .data()!['name'],
+                                              profileImageUrl: controller
+                                                  .storyListUser[index]
+                                                  .data()!['profileImageUrl'],
+                                              timeUploaded: controller
+                                                  .allStories![controller
                                                       .currentIndex.value]
                                                   .timeUploaded,
                                             ),

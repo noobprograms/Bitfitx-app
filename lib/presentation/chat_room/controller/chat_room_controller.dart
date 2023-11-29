@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 class ChatRoomController extends GetxController {
   User currentUser = Get.arguments['cUser'];
   User thatUser = Get.arguments['tUser'];
+  String callToken = Get.arguments['callToken'];
   final TextEditingController messageController = TextEditingController();
   final ChatService chatService = ChatService();
 

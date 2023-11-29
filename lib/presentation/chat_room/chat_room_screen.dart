@@ -65,6 +65,7 @@ class ChatRoom extends StatelessWidget {
                 onPressed: () {
                   Get.offNamed(AppRoutes.voiceCallScreen, arguments: {
                     'cUser': controller.currentUser,
+                    'callToken': controller.callToken
                   });
                 },
                 icon: Icon(
@@ -78,7 +79,8 @@ class ChatRoom extends StatelessWidget {
                 onPressed: () {
                   Get.offNamed(AppRoutes.videoCallScreen, arguments: {
                     'cUser': controller.currentUser,
-                    'tUser': controller.thatUser
+                    'tUser': controller.thatUser,
+                    'callToken': controller.callToken
                   });
                 },
                 icon: Icon(Icons.video_call, color: Colors.yellow)),

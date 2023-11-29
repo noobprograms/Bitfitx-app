@@ -12,11 +12,19 @@ import 'package:bitfitx_project/presentation/chat_room/binding/media_preview_bin
 import 'package:bitfitx_project/presentation/chat_room/chat_room_screen.dart';
 import 'package:bitfitx_project/presentation/chat_room/media_preview_screen.dart';
 import 'package:bitfitx_project/presentation/chats_screen/chats_screen.dart';
+import 'package:bitfitx_project/presentation/groups_screen/bindings/singleGroupBinding.dart';
 
 import 'package:bitfitx_project/presentation/groups_screen/groups_screen.dart';
+import 'package:bitfitx_project/presentation/groups_screen/individual_group_screen.dart';
 
 import 'package:bitfitx_project/presentation/home_screen/home_screen.dart';
+import 'package:bitfitx_project/presentation/live_streaming/attendingLive.dart';
+import 'package:bitfitx_project/presentation/live_streaming/binding/attending_binding.dart';
+import 'package:bitfitx_project/presentation/live_streaming/binding/live_binding.dart';
+import 'package:bitfitx_project/presentation/live_streaming/live_screen.dart';
 import 'package:bitfitx_project/presentation/login_screen/binding/login_binding.dart';
+import 'package:bitfitx_project/presentation/marketplace/bindings/marketplace_bindings.dart';
+import 'package:bitfitx_project/presentation/marketplace/marketplace_screen.dart';
 import 'package:bitfitx_project/presentation/reels_screen/reels_screen.dart';
 import 'package:bitfitx_project/presentation/sign_up_screen/binding/sign_up_binding.dart';
 import 'package:bitfitx_project/presentation/signup_login_screen/binding/signup_login_binding.dart';
@@ -51,16 +59,19 @@ class AppRoutes {
   static const String signUpScreen = '/sign_up_screen';
 
   static const String storyScreen = '/story_screen';
+  static const String liveScreen = '/live_screen';
+  static const String attendingLiveScreen = '/attending_live_screen';
   static const String otherAccountScreen = '/other_account_screen';
   static const String appNavigationScreen = '/app_navigation_screen';
   static const String confirmStoryScreen = '/confirm_story_screen';
-
+  static const String marketplace = '/marketplace_screen';
   static const String chatsScreen = '/chats_screen';
   static const String chatRoom = '/chat_room';
   static const String mediaPreview = '/media_preview';
   static const String videoFullScreen = '/video_full_screen';
   static const String videoCallScreen = '/video_call_screen';
   static const String voiceCallScreen = '/voice_call_screen';
+  static const String singleGroupView = '/single_group_screen';
   static const String tabbedScreen = '/tabbed_screen';
   static final routes = [
     GetPage(
@@ -93,11 +104,21 @@ class AppRoutes {
       page: () => ConfirmStory(),
       binding: ConfirmStoryBinding(),
     ),
-    // GetPage(
-    //   name: otherAccountScreen,
-    //   page: () => OtherAccount(),
-    //   binding: OtherAccountBinding(),
-    // ),
+    GetPage(
+      name: liveScreen,
+      page: () => LiveScreen(),
+      binding: LiveBinding(),
+    ),
+    GetPage(
+      name: attendingLiveScreen,
+      page: () => AttendingLive(),
+      binding: AttendingLiveBinding(),
+    ),
+    GetPage(
+      name: marketplace,
+      page: () => Marketplace(),
+      binding: MarketplaceBindings(),
+    ),
     GetPage(
       name: chatsScreen,
       page: () => ChatScreen(),
@@ -127,6 +148,11 @@ class AppRoutes {
       name: voiceCallScreen,
       page: () => VoiceCalling(),
       binding: VoiceCallBinding(),
+    ),
+    GetPage(
+      name: singleGroupView,
+      page: () => SingleGroupView(),
+      binding: SingleGroupBinding(),
     ),
     GetPage(
       name: tabbedScreen,
