@@ -73,12 +73,12 @@ class TabbedScreen extends StatelessWidget {
             children: [
               Home(controller.currentUser),
               TrendingScreen(controller.currentUser),
-              // ReelsScreen(controller.currentUser),
-              // AddContentScreen(controller.currentUser),
-              // VerifiedVidScreen(controller.currentUser),
-              Container(),
-              Container(),
-              Container(),
+              ReelsScreen(controller.currentUser),
+              AddContentScreen(controller.currentUser),
+              VerifiedVidScreen(controller.currentUser),
+              // Container(),
+              // Container(),
+              // Container(),
               GroupsScreen(controller.currentUser),
 
               // Container(),
