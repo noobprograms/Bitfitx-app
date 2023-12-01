@@ -61,24 +61,38 @@ class AuthController extends GetxController {
       // if the user exists and logged in the the user is navigated to the Home Screen
       var profileImage;
       var coverImage;
-      await firebaseFirestore
+      var result = await firebaseFirestore
           .collection('users')
           .doc(googleSignInAccount.id)
-          .get()
-          .then((value) {
-        userToStore = usermodel.User(
-            uid: value.data()!['uid'],
-            name: value.data()!['name'],
-            email: value.data()!['email'],
-            tokenValue: value.data()!['tokenValue'],
-            profileImageUrl: value.data()!['profileImageUrl'],
-            coverImageUrl: value.data()!['coverImageUrl'],
-            fans: value.data()!['fans'],
-            following: value.data()!['following'],
-            posts: value.data()!['posts'],
-            wallet: value.data()!['wallet']);
-      });
+          .get();
 
+      if (result.exists) {
+        userToStore = usermodel.User(
+            uid: result.data()!['uid'],
+            name: result.data()!['name'],
+            email: result.data()!['email'],
+            tokenValue: result.data()!['tokenValue'],
+            profileImageUrl: result.data()!['profileImageUrl'],
+            coverImageUrl: result.data()!['coverImageUrl'],
+            fans: result.data()!['fans'],
+            following: result.data()!['following'],
+            posts: result.data()!['posts'],
+            wallet: result.data()!['wallet']);
+      } else {
+        userToStore = usermodel.User(
+          uid: googleSignInAccount.id,
+          name: googleSignInAccount.displayName!,
+          email: googleSignInAccount.email!,
+          profileImageUrl: googleSignInAccount.photoUrl!,
+          following: [],
+          fans: [],
+          tokenValue: token!,
+        );
+        await firebaseFirestore
+            .collection('users')
+            .doc(googleSignInAccount.id)
+            .set(userToStore.toJson());
+      }
       Get.offAllNamed(AppRoutes.tabbedScreen,
           arguments: {'currentUser': userToStore});
     }
