@@ -124,7 +124,7 @@ class ChatService extends ChangeNotifier {
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization':
-                    'key=AAAAkN2I2hs:APA91bH8Ahb81K44mKUKBeUoEhJZJfSWjpyYkZxnaLTTyroMgw7fWpH-SEtWgGkIP-pbqL8dt1bo7TNGLtux3AUgMDzyW0hdQBsOJPK8A9uFBcrsftVMin6bAgotQJ_bYXmYtgoK_EA9'
+                    'key=fcm_push_notification_key_here'
               },
               body: jsonEncode(body));
       print(response.body);
