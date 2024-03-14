@@ -1,5 +1,5 @@
 # Bitfitx Social
-Bitfitx is a social media app made in flutter with firebase. The app is developed using MVC archtecture and GetX for state management.
+Bitfitx is a social media app made in flutter with firebase. The app is developed using MVC archtecture and GetX for state management. Railway server was used to run rtc token generator to get new tokens for calls. FCM cloud messaging is used to setup push notifications. Stripe is used as payment gateway but marketplace is turned off for now.
 ## Login with email and Google
 ![image](https://github.com/noobprograms/Bitfitx-app/assets/78657816/b92eaee0-9254-4b5f-9577-6bf2f3da13db)
 ![image](https://github.com/noobprograms/Bitfitx-app/assets/78657816/ec702879-d674-41a4-8079-f33e274574de)
